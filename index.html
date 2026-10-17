@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ขุนช้างคิดเงิน</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+[v-cloak]{display:none}
+:root{--paper:#F4F5F9;--ink:#161A2E;--mute:#666C85;--line:#E3E6EF;--acc:#0B7F72;--acc-soft:#E3F3F0;--owe:#C0364F;--owe-soft:#FCEBEE;--warn:#FFF3D6;--warn-ink:#7A4E00}
+body{font-family:'IBM Plex Sans Thai','Noto Sans Thai','Sarabun',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
+#app{box-shadow:0 0 0 1px var(--line)}
+input,select,textarea{font-size:16px;font-family:inherit}
+button,label{touch-action:manipulation}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.t-mute{color:var(--mute)}.t-owe{color:var(--owe)}.t-acc{color:var(--acc)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:14px;font-weight:600;transition:background-color .15s}
+.btn:disabled{opacity:.5}
+.btn-pri{background:var(--acc);color:#fff}.btn-pri:active{background:#09665C}
+.btn-soft{background:var(--acc-soft);color:var(--acc)}
+.btn-line{border:1.5px dashed #C3C8DA;color:var(--mute);background:#fff}
+.btn-bad{background:var(--owe);color:#fff}
+.btn-ghost{background:#EEF0F7;color:var(--ink)}
+.btn-sm{width:auto;min-height:38px;padding:0 16px;font-size:14px;border-radius:999px}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;color:var(--mute);font-size:24px;line-height:1}
+.icon-btn:active{background:#EEF0F7}
+.fld{width:100%;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.fld:disabled{background:#F7F8FB;color:var(--mute)}
+.fld-plain{min-height:44px;background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0 2px;width:100%;color:var(--ink)}
+textarea.fld{padding:12px 14px}
+.lbl{display:block;font-size:13px;font-weight:600;color:var(--mute);margin-bottom:6px}
+.hint{font-size:13px;color:var(--mute);margin-top:6px;line-height:1.5}
+.pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:#EEF0F7;font-size:12px;font-weight:600;color:var(--mute)}
+.pill.bad{background:var(--owe-soft);color:var(--owe)}.pill.ok{background:var(--acc-soft);color:var(--acc)}
+.dot{width:8px;height:8px;border-radius:50%;background:#B7BCCE}.dot.on{background:#17A673}
+.tabs{display:flex;overflow-x:auto;white-space:nowrap;padding:0 8px;background:#fff;border-bottom:1px solid var(--line);scrollbar-width:none}
+.tabbtn{padding:14px 14px 12px;font-size:15px;font-weight:500;color:var(--mute);border-bottom:3px solid transparent}
+.tab-active{color:var(--ink);font-weight:700;border-bottom-color:var(--acc)}
+.chip{min-height:38px;padding:0 16px;border-radius:999px;background:#EEF0F7;color:#394058;font-size:14px;font-weight:500;transition:background-color .12s,color .12s}
+.chip[aria-pressed=true]{background:var(--acc);color:#fff}
+.chip:disabled{opacity:.65}
+.chip-all{background:#fff;border:1px solid var(--acc);color:var(--acc)}
+.person{display:inline-flex;align-items:center;gap:2px;min-height:36px;padding:0 4px 0 14px;border-radius:999px;background:#EEF0F7;font-size:14px;font-weight:500}
+.person button{width:32px;height:32px;font-size:20px;color:var(--mute)}
+.sec{padding:20px}
+.h3{font-size:17px;font-weight:700;margin-bottom:12px}
+.note{padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;margin-bottom:12px}
+.note.warn{background:var(--warn);color:var(--warn-ink)}.note.bad{background:var(--owe-soft);color:var(--owe);font-weight:600}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;border-radius:16px;background:var(--acc-soft)}
+.avatar{flex:none;width:42px;height:42px;border-radius:50%;background:var(--acc-soft);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:700}
+.row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.stub{position:relative;display:flex;justify-content:space-between;align-items:stretch;gap:14px;padding:16px 20px;margin-bottom:12px;background:var(--acc-soft);border-radius:16px}
+.stub::before,.stub::after{content:"";position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;transform:translateY(-50%)}
+.stub::before{left:-8px}.stub::after{right:-8px}
+.stub-amt{display:flex;align-items:center;padding-left:16px;border-left:2px dashed #93C9C1;font-size:20px;font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:80;max-width:90%;padding:10px 18px;border-radius:999px;background:var(--ink);color:#fff;font-size:14px;text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div id="boot" class="p-6 text-center text-gray-500">กำลังโหลด...</div>
+<script>setTimeout(function(){var b=document.getElementById('boot');if(b)b.textContent='โหลดแอปไม่สำเร็จ — เช็กอินเทอร์เน็ตหรือปิดตัวบล็อกโฆษณา แล้วรีเฟรช';},10000);</script>
+
+<div id="app" v-cloak class="max-w-md mx-auto min-h-screen bg-white relative pb-24">
+
+  <header class="h-14 px-5 flex items-center justify-between sticky top-0 z-50 bg-white border-b" style="border-color:var(--line)">
+    <h1 class="font-bold text-lg tracking-tight">ขุนช้างคิดเงิน</h1>
+    <div class="flex items-center gap-1">
+      <span class="pill"><i class="dot" :class="online ? 'on' : ''"></i>{{ online ? 'ออนไลน์' : 'ในเครื่องนี้' }}</span>
+      <button @click="showSettings = true" class="icon-btn" aria-label="ตั้งค่า"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button>
+    </div>
+  </header>
+
+  <div v-if="toastMsg" class="toast" role="status">{{ toastMsg }}</div>
+
+  <div v-if="payPid" class="fixed inset-0 z-[75] flex items-end justify-center" style="background:rgba(22,26,46,.5)" @click.self="payPid = null">
+    <div class="bg-white w-full max-w-md rounded-t-3xl p-5 pb-8 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold">ช่องทางรับเงินของ {{ payName }}</h3>
+        <button @click="payPid = null" class="icon-btn" aria-label="ปิด">&times;</button>
+      </div>
+      <div v-if="payEdit">
+        <label class="lbl" for="pa">เลขบัญชีหรือพร้อมเพย์</label>
+        <input id="pa" type="text" v-model="payForm.acct" class="fld mb-4" placeholder="เช่น กสิกร 123-4-56789-0 ชื่อ-สกุล">
+        <label class="lbl">รูป QR Code (ไม่บังคับ)</label>
+        <img v-if="payForm.qr" :src="payForm.qr" class="w-48 h-48 object-contain mx-auto mb-3 border rounded-xl" alt="QR Code">
+        <label class="btn btn-soft mb-4 cursor-pointer">{{ payForm.qr ? 'เปลี่ยนรูป QR' : 'เลือกรูป QR' }}<input type="file" accept="image/*" @change="pickQr" class="hidden"></label>
+        <button @click="savePay" class="btn btn-pri">บันทึก</button>
+      </div>
+      <div v-else>
+        <img v-if="payInfo.qr" :src="payInfo.qr" class="w-full max-w-xs object-contain mx-auto mb-4 rounded-xl border" alt="QR Code">
+        <div v-if="payInfo.acct" class="note" style="background:#EEF0F7;font-size:17px;font-weight:600;word-break:break-all">{{ payInfo.acct }}</div>
+        <button v-if="payInfo.acct" @click="copyAcct" class="btn btn-soft mb-3">คัดลอกเลขบัญชี</button>
+        <button @click="payEdit = true" class="btn btn-ghost">แก้ไข</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ตั้งค่า -->
+  <div v-if="showSettings" class="fixed inset-0 bg-white z-[70] overflow-y-auto">
+    <div class="max-w-md mx-auto p-5 pb-16">
+      <h2 class="text-2xl font-bold mb-6">ตั้งค่า</h2>
+
+      <div class="mb-6">
+        <label class="lbl" for="pin">รหัส Admin (PIN)</label>
+        <input id="pin" type="password" v-model="settings.adminPin" class="fld" placeholder="ตั้งรหัสสำหรับล็อกบิล">
+        <p class="hint">ใช้รหัสเดิมในเครื่องอื่นเพื่อเป็นเจ้าของห้องที่สร้างไว้</p>
+      </div>
+
+      <div class="mb-6">
+        <label class="lbl" for="gk">Gemini API Key (ฟรี) สำหรับสแกนบิล</label>
+        <input id="gk" type="password" v-model="settings.geminiKey" class="fld" placeholder="วาง Key จาก AI Studio" autocomplete="off">
+        <label class="lbl mt-4" for="gm">โมเดล</label>
+        <select id="gm" v-model="settings.geminiModel" class="fld">
+          <option v-for="m in modelOptions" :key="m" :value="m">{{ m }}</option>
+        </select>
+        <button @click="testKey" :disabled="testing || !settings.geminiKey" class="btn btn-soft mt-3">{{ testing ? 'กำลังทดสอบ...' : 'ทดสอบ Key และโมเดล' }}</button>
+        <p v-if="testMsg" class="note mt-3" :class="testOk ? '' : 'bad'" :style="testOk ? 'background:var(--acc-soft);color:var(--acc);font-weight:600' : ''">{{ testMsg }}</p>
+        <p class="hint">เก็บในเครื่องนี้เท่านั้น และส่งไปที่ Google เฉพาะตอนสแกน</p>
+      </div>
+
+      <div class="mb-8">
+        <label class="lbl" for="fc">Firebase Config</label>
+        <textarea id="fc" v-model="settings.firebaseConfig" class="fld h-32" placeholder="วางทั้งก้อนจาก Firebase Console (ต้องมี databaseURL)"></textarea>
+        <p class="hint">เจ้าของกรอกเครื่องเดียวพอ ปุ่ม "แชร์ลิงก์" จะพ่วงค่านี้ไปในลิงก์ให้เพื่อนอัตโนมัติ เพื่อนไม่ต้องตั้งค่าอะไร</p>
+        <p v-if="fbError" class="note bad mt-3">{{ fbError }}</p>
+      </div>
+
+      <button @click="saveSettings" class="btn btn-pri mb-3">บันทึก</button>
+      <button @click="showSettings = false" class="btn btn-ghost">ปิด</button>
+    </div>
+  </div>
+
+  <!-- หน้าแรก -->
+  <div v-if="!currentRoom" class="px-6 pt-16 pb-8">
+    <h2 class="text-3xl font-bold leading-tight mb-3">เริ่มทริปใหม่</h2>
+    <p class="t-mute mb-8 leading-relaxed">สร้างลิงก์แล้วส่งเข้า LINE ให้เพื่อนเข้ามาจิ้มรายการที่ตัวเองกิน ระบบหารและบอกว่าใครต้องโอนให้ใคร</p>
+    <label class="lbl" for="tn">ชื่อทริป</label>
+    <input id="tn" type="text" v-model="newTripName" @keyup.enter="createTrip" class="fld mb-4" placeholder="เช่น วันเกิดเอก">
+    <button @click="createTrip" class="btn btn-pri">สร้างทริป (ลิงก์อายุ 3 วัน)</button>
+    <p v-if="settings.adminPin" class="hint text-center">ตั้ง PIN เจ้าของแล้ว</p>
+    <p v-if="!online" class="note warn mt-6">ตอนนี้ข้อมูลอยู่ในเครื่องนี้เท่านั้น เพื่อนที่เปิดลิงก์จะไม่เห็นห้อง ต้องตั้งค่า Firebase ก่อนถึงจะแชร์ได้</p>
+  </div>
+
+  <!-- ห้อง -->
+  <div v-else class="flex flex-col">
+    <div v-if="status === 'loading'" class="p-10 text-center t-mute">กำลังโหลดห้อง...</div>
+    <div v-else-if="status !== 'ok'" class="p-8 text-center">
+      <p class="text-lg font-bold mb-2">{{ status === 'error' ? 'เปิดห้องไม่ได้' : 'ไม่พบห้องนี้' }}</p>
+      <p class="t-mute text-sm mb-6 leading-relaxed">{{ status === 'error' ? roomErr : (online ? 'ลิงก์อาจผิดหรือห้องถูกลบแล้ว' : 'ลิงก์นี้ไม่มีข้อมูลเชื่อมต่อ ให้เจ้าของกด "แชร์ลิงก์" ในแอปแล้วส่งลิงก์ใหม่') }}</p>
+      <button @click="leaveRoom" class="btn btn-ghost btn-sm mx-auto">กลับหน้าหลัก</button>
+    </div>
+
+    <template v-else>
+      <div class="px-5 pt-4 pb-3 flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <button @click="leaveRoom" class="text-sm t-mute mb-1">‹ หน้าหลัก</button>
+          <h2 class="text-xl font-bold truncate">{{ roomData.name }}</h2>
+          <div v-if="roomData.isLocked || isAdmin" class="flex gap-2 mt-2">
+            <span v-if="roomData.isLocked" class="pill bad">ล็อกแล้ว</span>
+            <span v-if="isAdmin" class="pill ok">เจ้าของ</span>
+          </div>
+        </div>
+        <button @click="copyLink" class="btn btn-soft btn-sm shrink-0 mt-5">แชร์ลิงก์</button>
+      </div>
+
+      <div v-if="isExpired" class="note bad mx-5">ลิงก์นี้หมดอายุแล้ว ดูได้อย่างเดียว</div>
+
+      <div class="tabs sticky top-14 z-40">
+        <button v-for="(v, idx) in roomData.venues" :key="idx" @click="activeTab = idx" class="tabbtn" :class="activeTab === idx ? 'tab-active' : ''">ร้าน {{ idx + 1 }}</button>
+        <button @click="activeTab = 'summary'" class="tabbtn" :class="activeTab === 'summary' ? 'tab-active' : ''">สรุปยอด</button>
+        <button v-if="isAdmin && !isReadonly" @click="addVenue" class="tabbtn t-acc font-bold">+ เพิ่มร้าน</button>
+      </div>
+
+      <!-- ร้าน -->
+      <div v-if="activeVenue" class="sec">
+        <input :value="activeVenue.name" @change="setVenue('name', $event.target.value)" :disabled="isReadonly" class="fld-plain text-xl font-bold mb-5" placeholder="ชื่อร้าน" aria-label="ชื่อร้าน">
+
+        <label class="lbl">ใครจ่ายไปก่อน (ใส่ได้หลายคน)</label>
+        <div v-for="(x, i) in activeVenue.payments" :key="i" class="flex gap-2 mb-2">
+          <select :value="x.pid" @change="setPayment(i, 'pid', $event.target.value)" :disabled="isReadonly" class="fld flex-1 min-w-0" aria-label="คนจ่าย">
+            <option value="">เลือกคนจ่าย</option>
+            <option v-for="p in roomData.people" :key="p.id" :value="p.id">{{ p.name }}</option>
+          </select>
+          <input type="number" inputmode="decimal" :value="x.amount || ''" @change="setPayment(i, 'amount', $event.target.value)" :disabled="isReadonly" class="fld w-28 text-right" :placeholder="activeVenue.payments.length === 1 ? 'เต็มบิล' : 'ยอดที่จ่าย'" aria-label="ยอดที่จ่าย">
+          <button v-if="!isReadonly" @click="removePayment(i)" class="icon-btn" aria-label="ลบคนจ่าย">&times;</button>
+        </div>
+        <button v-if="!isReadonly" @click="addPayment" class="btn btn-line mb-5" style="min-height:44px">+ เพิ่มคนจ่าย</button>
+        <div v-else class="mb-5"></div>
+
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <div><label class="lbl">Service</label>
+            <select :value="activeVenue.svc" @change="setVenue('svc', $event.target.value)" :disabled="isReadonly" class="fld px-2"><option value="0">ไม่มี</option><option value="10">10%</option></select></div>
+          <div><label class="lbl">VAT</label>
+            <select :value="activeVenue.vat" @change="setVenue('vat', $event.target.value)" :disabled="isReadonly" class="fld px-2"><option value="0">ไม่มี</option><option value="7">7%</option></select></div>
+          <div><label class="lbl">ส่วนลด ฿</label>
+            <input type="number" inputmode="decimal" :value="activeVenue.discount" @change="setVenue('discount', $event.target.value)" :disabled="isReadonly" class="fld px-2"></div>
+        </div>
+        <div class="total mb-8">
+          <div><div class="text-sm font-semibold">ยอดบิลร้านนี้</div><div class="text-xs t-mute">เทียบกับใบเสร็จจริงได้เลย</div></div>
+          <div class="text-2xl font-bold">฿{{ venueTotal.toFixed(2) }}</div>
+        </div>
+
+        <h3 class="h3">เพื่อนในโต๊ะ</h3>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span v-for="p in roomData.people" :key="p.id" class="person">{{ p.name }}<button v-if="!isReadonly" @click="removePerson(p.id)" :aria-label="'ลบ ' + p.name">&times;</button></span>
+          <span v-if="roomData.people.length === 0" class="hint" style="margin:0">ยังไม่มีใคร เพิ่มชื่อด้านล่าง</span>
+        </div>
+        <div class="flex gap-2 mb-8" v-if="!isReadonly">
+          <input type="text" v-model="newPersonName" @keyup.enter="addPerson" class="fld flex-1" placeholder="ชื่อเพื่อน" aria-label="ชื่อเพื่อน">
+          <button @click="addPerson" class="btn btn-ghost btn-sm" style="min-height:48px;border-radius:12px">เพิ่ม</button>
+        </div>
+
+        <div class="flex justify-between items-center mb-1">
+          <h3 class="h3" style="margin:0">รายการที่สั่ง</h3>
+          <label v-if="settings.geminiKey && !isReadonly" class="btn btn-soft btn-sm cursor-pointer">สแกนบิล
+            <input type="file" accept="image/*" @change="handleScanBill" class="hidden" :disabled="isScanning">
+          </label>
+        </div>
+        <div v-if="isScanning" class="note warn mt-3 animate-pulse">AI กำลังอ่านบิล รอสักครู่...</div>
+        <div v-if="scanErr" class="note bad mt-3" @click="scanErr = ''">{{ scanErr }} <span class="text-xs font-normal">(แตะเพื่อปิด)</span></div>
+
+        <div v-for="item in activeVenue.items" :key="item.id" class="py-4 border-b" style="border-color:var(--line)">
+          <div class="flex items-center gap-2">
+            <input :value="item.name" @change="setItem(item.id, 'name', $event.target.value)" :disabled="isReadonly" class="fld-plain flex-1 min-w-0 font-semibold" placeholder="ชื่อเมนู" aria-label="ชื่อเมนู">
+            <input type="number" inputmode="decimal" :value="item.price" @change="setItem(item.id, 'price', $event.target.value)" :disabled="isReadonly" class="fld w-24 text-right" placeholder="ราคา" aria-label="ราคา">
+            <button v-if="!isReadonly" @click="removeItem(item.id)" class="icon-btn" aria-label="ลบเมนู">&times;</button>
+          </div>
+          <p class="text-[13px] mt-3 mb-2" :class="item.claimants.length ? 't-mute' : 't-owe font-semibold'">
+            {{ item.claimants.length ? 'หาร ' + item.claimants.length + ' คน คนละ ฿' + (item.price / item.claimants.length).toFixed(2) : 'ยังไม่มีคนกินอันนี้' }}
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <button v-for="p in roomData.people" :key="p.id" @click="toggleClaim(item.id, p.id)" :disabled="isReadonly" class="chip" :aria-pressed="item.claimants.includes(p.id)">{{ p.name }}</button>
+            <button v-if="!isReadonly" @click="claimAll(item.id)" class="chip chip-all">ทุกคน</button>
+          </div>
+        </div>
+        <button v-if="!isReadonly" @click="addItem" class="btn btn-line mt-4">+ เพิ่มเมนู</button>
+      </div>
+
+      <!-- สรุปยอด -->
+      <div v-if="activeTab === 'summary'" class="sec">
+        <div v-if="summaryData.warn.length" class="note warn">
+          <div v-for="(w, i) in summaryData.warn" :key="i">{{ w }}</div>
+        </div>
+        <div v-if="roomData.people.length === 0" class="t-mute text-center py-10">ยังไม่มีข้อมูล เพิ่มเพื่อนและรายการในแท็บร้านก่อน</div>
+        <div v-else>
+          <h3 class="h3">ใครต้องโอนให้ใคร</h3>
+          <div v-if="summaryData.groups.length === 0" class="stub" style="justify-content:center"><span class="font-semibold t-acc">เคลียร์กันครบแล้ว</span></div>
+          <div v-for="g in summaryData.groups" :key="g.id" class="mb-5">
+            <div class="flex justify-between items-baseline mb-2 px-1"><span class="font-bold">{{ g.from }} ต้องโอน</span><span class="text-sm t-mute">รวม ฿{{ g.total.toFixed(2) }}</span></div>
+            <div v-for="t in g.items" :key="t.toId" class="stub">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <svg class="t-mute shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  <span class="font-semibold truncate">{{ t.to }}</span>
+                </div>
+                <button @click="openPay(t.toId)" class="text-sm font-semibold t-acc mt-1">{{ hasPay(t.toId) ? 'ดู QR / เลขบัญชี' : 'ยังไม่มีช่องทางรับเงิน' }}</button>
+              </div>
+              <div class="stub-amt">฿{{ t.amount.toFixed(2) }}</div>
+            </div>
+          </div>
+          <button @click="copySummary" class="btn btn-pri mt-2 mb-8">คัดลอกสรุปส่ง LINE</button>
+
+          <h3 class="h3">ยอดรายคน</h3>
+          <div v-for="p in summaryData.people" :key="p.id" class="row">
+            <div class="avatar">{{ p.name.charAt(0) }}</div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold truncate">{{ p.name }}</div>
+              <div class="text-xs t-mute">กินไป ฿{{ p.consumed.toFixed(2) }} จ่ายไปก่อน ฿{{ p.paid.toFixed(2) }}</div>
+              <button @click="openPay(p.id)" class="text-xs font-semibold t-acc mt-1">{{ hasPay(p.id) ? 'ดูช่องทางรับเงิน' : 'ใส่ช่องทางรับเงิน' }}</button>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-semibold" :class="p.settled ? 't-mute' : (p.owes ? 't-owe' : 't-acc')">{{ p.settled ? 'เคลียร์แล้ว' : (p.owes ? 'ต้องจ่าย' : 'ได้คืน') }}</div>
+              <div class="text-lg font-bold">฿{{ Math.abs(p.net).toFixed(2) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="isAdmin" class="mt-10">
+          <button v-if="!roomData.isLocked" @click="lockRoom" class="btn btn-bad">ล็อกบิล (ปิดแก้ไข)</button>
+          <button v-else @click="unlockRoom" class="btn btn-ghost">ปลดล็อกบิล</button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<script type="module">
+import { createApp, ref, computed, watch, onMounted } from 'https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.prod.js';
+
+/* ===== ตั้งค่า (แก้ก่อนอัปขึ้น GitHub) =====
+   Firebase web config ไม่ใช่ความลับ (ความปลอดภัยอยู่ที่ Database Rules) ใส่ในไฟล์ได้
+   เพื่อให้เพื่อนที่เปิดลิงก์ใช้งานได้ทันทีโดยไม่ต้องตั้งค่าอะไร
+   ต้องมี databaseURL เช่น https://xxx-default-rtdb.asia-southeast1.firebasedatabase.app */
+const FIREBASE_CONFIG = {
+  // apiKey: "...", authDomain: "...", databaseURL: "...", projectId: "...", appId: "..."
+};
+const DEFAULT_MODEL = 'gemini-3.5-flash';
+const FB = 'https://www.gstatic.com/firebasejs/10.8.0/';
+const GEMINI = 'https://generativelanguage.googleapis.com/v1beta/';
+const SK = 'partyBillSettings', LK = 'localRoom_';
+const NL = String.fromCharCode(10);
+
+const uid = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => b.toString(36).padStart(2, '0')).join('');
+const arr = x => (x ? Object.values(x) : []);
+const sha = async s => {
+  try { return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))), b => b.toString(16).padStart(2, '0')).join(''); }
+  catch { let h = 5381; for (const c of s) h = ((h << 5) + h + c.charCodeAt(0)) | 0; return 'x' + h; }
+};
+const b64u = s => btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const hashCfg = () => { // ค่าเชื่อมต่อ Firebase ที่พ่วงมากับลิงก์ (#c=...) เพื่อให้เพื่อนไม่ต้องตั้งค่าเอง
+  const m = location.hash.match(/[#&]c=([\w-]+)/); if (!m) return null;
+  try { const c = JSON.parse(atob(m[1].replace(/-/g, '+').replace(/_/g, '/'))); return c && /^https:\/\//.test(c.databaseURL || '') ? c : null; } catch { return null; }
+};
+const parseCfg = s => { // รับได้ทั้ง JSON และก้อน JS จาก Firebase Console
+  const m = (s || '').match(/\{[\s\S]*\}/); if (!m) return null;
+  try { return JSON.parse(m[0].replace(/'/g, '"').replace(/([{,]\s*)([A-Za-z_]\w*)\s*:/g, '$1"$2":').replace(/,\s*}/g, '}')); } catch { return null; }
+};
+// Firebase ทิ้ง array ว่าง/แปลง array เป็น object -> ทำให้โครงสร้างกลับมาครบเสมอ
+const norm = d => {
+  d.people = arr(d.people); d.pay = d.pay || {};
+  d.venues = arr(d.venues).map(v => ({ name: '', payer: '', svc: 0, vat: 0, discount: 0, ...v,
+    payments: arr(v.payments).length ? arr(v.payments) : (v.payer ? [{ pid: v.payer, amount: 0 }] : []),
+    items: arr(v.items).map(i => ({ name: '', price: 0, ...i, id: i.id || uid(), claimants: arr(i.claimants) })) }));
+  return d;
+};
+const copyText = async t => {
+  try { await navigator.clipboard.writeText(t); return true; } catch {
+    const a = document.createElement('textarea'); a.value = t; a.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(a); a.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch {} a.remove(); return ok;
+  }
+};
+const shrink = (file, max = 2000, q = 0.85) => new Promise((res, rej) => { // ย่อรูปจากมือถือ (5-10MB) ก่อนส่ง
+  const img = new Image(), url = URL.createObjectURL(file);
+  img.onload = () => {
+    const s = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+    res(c.toDataURL('image/jpeg', q).split(',')[1]);
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('เปิดรูปนี้ไม่ได้ (ถ้าเป็น HEIC ให้ถ่ายใหม่หรือแปลงเป็น JPG)')); };
+  img.src = url;
+});
+const errText = e => {
+  const m = e.message || String(e);
+  if (e instanceof TypeError) return 'เชื่อมต่อ Google ไม่ได้ (เช็กอินเทอร์เน็ต / ปิดตัวบล็อกโฆษณา)';
+  if (e instanceof SyntaxError) return 'AI ตอบกลับผิดรูปแบบ ลองสแกนใหม่อีกครั้ง';
+  if (e.status === 400 && /api key/i.test(m)) return 'API Key ไม่ถูกต้อง (คัดลอกให้ครบ ไม่มีช่องว่าง/เครื่องหมายคำพูด)';
+  if (e.status === 403) return 'Key ถูกปฏิเสธหรือถูกจำกัดสิทธิ์: ' + m;
+  if (e.status === 404) return 'ไม่พบโมเดลนี้ (อาจถูกปิดบริการแล้ว) เลือกโมเดลใหม่ในตั้งค่า: ' + m;
+  if (e.status === 429) return 'โควต้าฟรีเต็มชั่วคราว รอ 1 นาทีแล้วลองใหม่';
+  return m;
+};
+
+createApp({
+  setup() {
+    const showSettings = ref(false), online = ref(false), fbError = ref('');
+    const settings = ref({ adminPin: '', geminiKey: '', geminiModel: DEFAULT_MODEL, firebaseConfig: '' });
+    const currentRoom = ref(null), status = ref('loading'), roomErr = ref('');
+    const roomData = ref({ name: '', expiresAt: 0, isLocked: false, adminHash: '', people: [], venues: [] });
+    const activeTab = ref(0), newTripName = ref(''), newPersonName = ref('');
+    const isScanning = ref(false), scanErr = ref(''), toastMsg = ref('');
+    const models = ref([]), testing = ref(false), testMsg = ref(''), testOk = ref(false), myHash = ref('');
+    let db = null, F = null, roomRef = null, unsub = null, tt = null, activeCfg = null;
+
+    const toast = t => { toastMsg.value = t; clearTimeout(tt); tt = setTimeout(() => toastMsg.value = '', 3500); };
+    const persist = () => { try { localStorage.setItem(SK, JSON.stringify(settings.value)); } catch {} };
+
+    /* ---------- Settings ---------- */
+    const loadSettings = () => { try { Object.assign(settings.value, JSON.parse(localStorage.getItem(SK) || '{}')); } catch {} };
+    const saveSettings = () => {
+      const s = settings.value;
+      s.adminPin = (s.adminPin || '').trim();
+      s.geminiKey = (s.geminiKey || '').trim().replace(/^["']|["']$/g, '');
+      s.firebaseConfig = (s.firebaseConfig || '').trim();
+      persist(); location.reload();
+    };
+
+    /* ---------- Firebase ---------- */
+    const initFirebase = async () => {
+      let cfg = FIREBASE_CONFIG;
+      const hc = hashCfg();
+      if (!cfg.apiKey && hc) { cfg = hc; if (!settings.value.firebaseConfig) { settings.value.firebaseConfig = JSON.stringify(hc); persist(); } }
+      if (!cfg.apiKey && settings.value.firebaseConfig) {
+        cfg = parseCfg(settings.value.firebaseConfig);
+        if (!cfg) { fbError.value = 'อ่าน Firebase Config ไม่ออก (วางทั้งก้อน { ... } จาก Console)'; return; }
+      }
+      if (!cfg.apiKey) return;
+      if (!cfg.databaseURL) { fbError.value = 'Config ไม่มี databaseURL — สร้าง Realtime Database ใน Firebase ก่อน แล้วคัดลอก Config ใหม่'; return; }
+      activeCfg = cfg;
+      try {
+        const [a, d] = await Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-database.js')]);
+        F = d; db = d.getDatabase(a.initializeApp(cfg)); online.value = true;
+      } catch (e) { fbError.value = 'เริ่ม Firebase ไม่ได้: ' + e.message; }
+    };
+
+    /* ---------- Room ---------- */
+    const loadRoom = id => {
+      if (!/^[A-Za-z0-9_-]{6,40}$/.test(id)) return toast('ลิงก์ห้องไม่ถูกต้อง');
+      if (unsub) { unsub(); unsub = null; }
+      currentRoom.value = id; status.value = 'loading'; activeTab.value = 0;
+      if (db) {
+        roomRef = F.ref(db, 'rooms/' + id);
+        unsub = F.onValue(roomRef, s => {
+          const d = s.val();
+          if (!d) { status.value = 'notfound'; return; }
+          roomData.value = norm(d); status.value = 'ok';
+        }, e => { status.value = 'error'; roomErr.value = e.message; });
+      } else {
+        try { const d = localStorage.getItem(LK + id); if (!d) throw 0; roomData.value = norm(JSON.parse(d)); status.value = 'ok'; }
+        catch { status.value = 'notfound'; }
+      }
+    };
+    const leaveRoom = () => { if (unsub) { unsub(); unsub = null; } currentRoom.value = null; history.pushState({}, '', location.pathname); };
+
+    const isExpired = computed(() => !!roomData.value.expiresAt && Date.now() > roomData.value.expiresAt);
+    const isReadonly = computed(() => roomData.value.isLocked || isExpired.value);
+    const activeVenue = computed(() => activeTab.value === 'summary' ? null : roomData.value.venues[activeTab.value]);
+    watch([currentRoom, () => settings.value.adminPin], async () => {
+      myHash.value = currentRoom.value && settings.value.adminPin ? await sha(settings.value.adminPin + currentRoom.value) : '';
+    }, { immediate: true });
+    const isAdmin = computed(() => !!myHash.value && myHash.value === roomData.value.adminHash);
+
+    // ทุกการแก้ไขทำเป็น transaction บนข้อมูลล่าสุดของเซิร์ฟเวอร์ -> เพื่อนจิ้มพร้อมกันไม่เขียนทับกัน
+    const mutate = async (fn, force = false) => {
+      if (status.value !== 'ok' || (isReadonly.value && !force)) return;
+      try {
+        if (db) {
+          await F.runTransaction(roomRef, cur => {
+            if (cur === null) return cur;
+            const d = norm(cur);
+            if (!force && (d.isLocked || (d.expiresAt && Date.now() > d.expiresAt))) return; // ยกเลิก
+            fn(d); return JSON.parse(JSON.stringify(d));
+          });
+        } else {
+          const d = norm(JSON.parse(JSON.stringify(roomData.value))); fn(d);
+          localStorage.setItem(LK + currentRoom.value, JSON.stringify(d)); roomData.value = d;
+        }
+      } catch (e) { toast('บันทึกไม่สำเร็จ: ' + e.message); }
+    };
+
+    const createTrip = async () => {
+      if (!settings.value.adminPin) { toast('ตั้งรหัส Admin (PIN) ก่อนสร้างทริป'); showSettings.value = true; return; }
+      const name = newTripName.value.trim(); if (!name) return toast('กรุณาใส่ชื่อทริป');
+      const id = 'r' + uid();
+      const room = { name, expiresAt: Date.now() + 3 * 864e5, isLocked: false, adminHash: await sha(settings.value.adminPin + id),
+                     people: [], venues: [{ name: 'ร้านที่ 1', payer: '', svc: 0, vat: 0, discount: 0, items: [] }] };
+      try {
+        if (db) await F.set(F.ref(db, 'rooms/' + id), room); else localStorage.setItem(LK + id, JSON.stringify(room));
+      } catch (e) { return toast('สร้างทริปไม่สำเร็จ: ' + e.message + ' (เช็ก Database Rules)'); }
+      history.pushState({}, '', '?room=' + id); newTripName.value = ''; loadRoom(id);
+    };
+    const shareUrl = () => {
+      let u = location.href.split(/[?#]/)[0] + '?room=' + currentRoom.value;
+      if (!FIREBASE_CONFIG.apiKey && activeCfg) { const { apiKey, databaseURL, projectId } = activeCfg; u += '#c=' + b64u(JSON.stringify({ apiKey, databaseURL, projectId })); }
+      return u;
+    };
+    const copyLink = async () => toast(await copyText(shareUrl()) ? 'คัดลอกลิงก์แล้ว ส่งใน LINE ได้เลย (เพื่อนไม่ต้องตั้งค่าอะไร)' : 'คัดลอกไม่สำเร็จ');
+
+    /* ---------- Actions (อ้างอิงด้วย id) ---------- */
+    const vIdx = () => activeTab.value;
+    const addVenue = () => mutate(d => d.venues.push({ name: 'ร้านที่ ' + (d.venues.length + 1), payer: '', svc: 0, vat: 0, discount: 0, items: [] }))
+      .then(() => { activeTab.value = roomData.value.venues.length - 1; });
+    const setVenue = (k, val) => { const v = vIdx(); mutate(d => { d.venues[v][k] = ['svc', 'vat', 'discount'].includes(k) ? (parseFloat(val) || 0) : val; }); };
+    const addPerson = () => {
+      const n = newPersonName.value.trim(); if (!n) return;
+      if (roomData.value.people.some(p => p.name === n)) return toast('มีชื่อนี้แล้ว (ลองเติมนามสกุลหรือเลข)');
+      newPersonName.value = ''; mutate(d => { if (!d.people.some(p => p.name === n)) d.people.push({ id: 'p' + uid(), name: n }); });
+    };
+    const removePerson = id => {
+      if (!confirm('ลบชื่อเพื่อนคนนี้?')) return;
+      mutate(d => { d.people = d.people.filter(p => p.id !== id);
+        d.venues.forEach(v => { if (v.payer === id) v.payer = ''; v.items.forEach(i => { i.claimants = i.claimants.filter(c => c !== id); }); }); });
+    };
+    const addItem = () => { const v = vIdx(); mutate(d => d.venues[v].items.push({ id: uid(), name: '', price: 0, claimants: [] })); };
+    const removeItem = id => { const v = vIdx(); mutate(d => { d.venues[v].items = d.venues[v].items.filter(i => i.id !== id); }); };
+    const setItem = (id, k, val) => { const v = vIdx(); mutate(d => { const i = d.venues[v].items.find(x => x.id === id); if (i) i[k] = k === 'price' ? (parseFloat(val) || 0) : val; }); };
+    const toggleClaim = (id, pid) => { const v = vIdx(); mutate(d => { const i = d.venues[v].items.find(x => x.id === id); if (!i) return;
+      const k = i.claimants.indexOf(pid); if (k < 0) i.claimants.push(pid); else i.claimants.splice(k, 1); }); };
+    const claimAll = id => { const v = vIdx(); mutate(d => { const i = d.venues[v].items.find(x => x.id === id); if (i) i.claimants = d.people.map(p => p.id); }); };
+    const lockRoom = () => { if (confirm('ยืนยันล็อกบิล? เพื่อนจะแก้ไขไม่ได้อีก')) mutate(d => { d.isLocked = true; }); };
+    const unlockRoom = () => mutate(d => { d.isLocked = false; }, true);
+    const addPayment = () => { const v = vIdx(); mutate(d => d.venues[v].payments.push({ pid: '', amount: 0 })); };
+    const setPayment = (i, k, val) => { const v = vIdx(); mutate(d => { const x = d.venues[v].payments[i]; if (x) x[k] = k === 'amount' ? (parseFloat(val) || 0) : val; }); };
+    const removePayment = i => { const v = vIdx(); mutate(d => { d.venues[v].payments.splice(i, 1); }); };
+    // ช่องทางรับเงิน (เลขบัญชี / รูป QR) ของแต่ละคน
+    const payPid = ref(null), payEdit = ref(false), payForm = ref({ acct: '', qr: '' });
+    const hasPay = pid => { const x = roomData.value.pay[pid]; return !!(x && (x.acct || x.qr)); };
+    const payInfo = computed(() => roomData.value.pay[payPid.value] || { acct: '', qr: '' });
+    const payName = computed(() => (roomData.value.people.find(p => p.id === payPid.value) || {}).name || '');
+    const openPay = pid => { payPid.value = pid; payForm.value = { acct: '', qr: '', ...(roomData.value.pay[pid] || {}) }; payEdit.value = !hasPay(pid); };
+    const savePay = async () => { const pid = payPid.value, f = { acct: payForm.value.acct.trim(), qr: payForm.value.qr || '' }; await mutate(d => { d.pay[pid] = f; }, true); payEdit.value = false; toast('บันทึกช่องทางรับเงินแล้ว'); };
+    const pickQr = async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { payForm.value.qr = 'data:image/jpeg;base64,' + await shrink(f, 480, 0.8); } catch (err) { toast(err.message); } };
+    const copyAcct = async () => toast(await copyText(payInfo.value.acct) ? 'คัดลอกเลขบัญชีแล้ว' : 'คัดลอกไม่สำเร็จ');
+
+    /* ---------- Gemini ---------- */
+    const gfetch = async (path, opt = {}) => {
+      const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 60000);
+      try {
+        const r = await fetch(GEMINI + path, { ...opt, signal: ctl.signal, headers: { 'Content-Type': 'application/json', 'x-goog-api-key': settings.value.geminiKey.trim() } });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) { const e = new Error(j.error?.message || 'HTTP ' + r.status); e.status = r.status; throw e; }
+        return j;
+      } catch (e) { if (e.name === 'AbortError') throw new Error('หมดเวลา (60 วินาที) ลองใหม่'); throw e; }
+      finally { clearTimeout(t); }
+    };
+    // ดึงรายชื่อโมเดลจริงจาก Google ด้วย Key ของคุณ (ไม่เดาชื่อเอง)
+    const loadModels = async () => {
+      const j = await gfetch('models?pageSize=200');
+      models.value = (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent')
+        && /gemini-.*flash/.test(m.name) && !/image|tts|live|audio|lite|robotics|computer/.test(m.name))
+        .map(m => m.name.replace('models/', '')).sort().reverse();
+      return models.value;
+    };
+    const modelOptions = computed(() => [...new Set([settings.value.geminiModel || DEFAULT_MODEL, DEFAULT_MODEL, ...models.value])]);
+    const testKey = async () => {
+      testing.value = true; testMsg.value = ''; testOk.value = false;
+      try {
+        settings.value.geminiKey = settings.value.geminiKey.trim().replace(/^["']|["']$/g, '');
+        const m = await loadModels();
+        if (!m.length) throw new Error('Key ใช้ได้ แต่ไม่พบโมเดล Flash ที่ใช้สแกนได้');
+        if (!m.includes(settings.value.geminiModel)) settings.value.geminiModel = m[0];
+        await gfetch('models/' + settings.value.geminiModel + ':generateContent', { method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: 'ตอบคำว่า OK' }] }] }) });
+        testOk.value = true; testMsg.value = '✅ ใช้งานได้ โมเดล: ' + settings.value.geminiModel + ' (กด "บันทึก" เพื่อใช้งาน)';
+      } catch (e) { testMsg.value = '❌ ' + errText(e); }
+      finally { testing.value = false; }
+    };
+    const PROMPT = 'อ่านใบเสร็จร้านอาหาร/ร้านเหล้านี้ แล้วสกัดเฉพาะรายการอาหารและเครื่องดื่มที่สั่ง '
+      + 'price = ราคารวมของบรรทัดนั้น (ราคาต่อหน่วย x จำนวน) ถ้าจำนวนมากกว่า 1 ให้ต่อท้ายชื่อด้วย " x2" เป็นต้น '
+      + 'ห้ามรวม Service Charge, VAT, ยอดรวม, ส่วนลด หรือบรรทัดชำระเงิน คงชื่อเมนูตามภาษาในบิล';
+    const SCHEMA = { type: 'OBJECT', properties: { items: { type: 'ARRAY', items: { type: 'OBJECT',
+      properties: { name: { type: 'STRING' }, price: { type: 'NUMBER' } }, required: ['name', 'price'] } } }, required: ['items'] };
+    const scanOnce = async (model, b64) => {
+      const j = await gfetch('models/' + model + ':generateContent', { method: 'POST', body: JSON.stringify({
+        contents: [{ parts: [{ text: PROMPT }, { inline_data: { mime_type: 'image/jpeg', data: b64 } }] }],
+        generationConfig: { responseMimeType: 'application/json', responseSchema: SCHEMA } }) });
+      const c = j.candidates?.[0], t = (c?.content?.parts || []).map(p => p.text || '').join('');
+      if (!t) throw new Error('AI ไม่ตอบกลับ' + (j.promptFeedback?.blockReason || c?.finishReason ? ' (' + (j.promptFeedback?.blockReason || c.finishReason) + ')' : ''));
+      return JSON.parse(t.replace(/```json|```/g, '').trim());
+    };
+    const handleScanBill = async e => {
+      const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+      if (!settings.value.geminiKey) return toast('ใส่ Gemini API Key ในตั้งค่าก่อน');
+      isScanning.value = true; scanErr.value = ''; const v = vIdx();
+      try {
+        const b64 = await shrink(file); let model = settings.value.geminiModel || DEFAULT_MODEL, data;
+        try { data = await scanOnce(model, b64); }
+        catch (err) { // โมเดลถูกปิด/ไม่มี -> เลือกตัวใหม่ล่าสุดที่ Key ใช้ได้แล้วลองอีกครั้ง
+          if (err.status !== 404) throw err;
+          const m = await loadModels(); if (!m.length) throw err;
+          model = m[0]; data = await scanOnce(model, b64); settings.value.geminiModel = model; persist();
+        }
+        const items = (data.items || []).filter(i => i && i.name);
+        if (!items.length) return toast('ไม่พบรายการในบิล ลองถ่ายให้ชัดขึ้น');
+        await mutate(d => items.forEach(i => d.venues[v].items.push({ id: uid(), name: String(i.name), price: parseFloat(i.price) || 0, claimants: [] })));
+        toast('เพิ่ม ' + items.length + ' รายการแล้ว — เช็กราคากับบิลจริงอีกครั้ง');
+      } catch (err) { console.error(err); scanErr.value = errText(err); }
+      finally { isScanning.value = false; }
+    };
+
+    /* ---------- สรุปยอด (คำนวณเป็นสตางค์ ไม่มีเศษลอย) ---------- */
+    const calc = computed(() => {
+      const R = roomData.value, st = {}, warn = [], vinfo = [], owe = {};
+      R.people.forEach(p => { st[p.id] = { id: p.id, name: p.name, consumed: 0, paid: 0, net: 0 }; });
+      R.venues.forEach((v, vi) => {
+        const label = v.name || 'ร้าน ' + (vi + 1), share = {}; let sub = 0, un = 0;
+        v.items.forEach(it => {
+          const c = Math.round((+it.price || 0) * 100); sub += c;
+          const ids = it.claimants.filter(id => st[id]);
+          if (!ids.length) { un += c; return; }
+          const base = Math.floor(c / ids.length); let r = c - base * ids.length;
+          ids.forEach(id => { share[id] = (share[id] || 0) + base + (r-- > 0 ? 1 : 0); });
+        });
+        const f = (1 + (+v.svc || 0) / 100) * (1 + (+v.vat || 0) / 100);
+        const total = Math.max(0, Math.round((sub - Math.round((+v.discount || 0) * 100)) * f));
+        vinfo.push(total);
+        if (!sub) return;
+        const ratio = total / sub, target = Math.round((sub - un) * ratio), keys = Object.keys(share); let sum = 0;
+        keys.forEach(id => { share[id] = Math.round(share[id] * ratio); sum += share[id]; });
+        if (keys.length) { const big = keys.reduce((a, b) => share[a] >= share[b] ? a : b); share[big] += target - sum; }
+        keys.forEach(id => { st[id].consumed += share[id]; });
+        // คนจ่ายไปก่อน: ถ้าใส่คนเดียวและไม่ใส่ยอด = จ่ายเต็มบิล
+        let pays = v.payments.filter(x => st[x.pid]).map(x => ({ pid: x.pid, a: Math.round((+x.amount || 0) * 100) }));
+        if (pays.length === 1 && pays[0].a <= 0) pays[0].a = total;
+        pays = pays.filter(x => x.a > 0);
+        const P = pays.reduce((t, x) => t + x.a, 0);
+        if (!P) { warn.push(label + ': ยังไม่ได้เลือกคนจ่ายบิล'); return; }
+        if (P !== total) warn.push(label + ': ยอดที่จ่ายไปก่อนรวม ฿' + (P / 100).toFixed(2) + ' ไม่ตรงกับยอดบิล ฿' + (total / 100).toFixed(2));
+        pays.forEach(x => { st[x.pid].paid += x.a; });
+        // ยอดที่แต่ละคนกิน แบ่งจ่ายให้คนที่ออกเงินไปก่อน ตามสัดส่วนเงินที่แต่ละคนออก
+        keys.forEach(d => {
+          let left = share[d];
+          pays.forEach((x, k) => {
+            const part = k === pays.length - 1 ? left : Math.floor(share[d] * x.a / P); left -= part;
+            if (x.pid !== d && part) { (owe[d] = owe[d] || {})[x.pid] = (owe[d][x.pid] || 0) + part; }
+          });
+        });
+        if (un > 0) warn.push(label + ': มีรายการที่ยังไม่มีคนกิน (ราว ฿' + (un * ratio / 100).toFixed(2) + ') ผู้จ่ายจะรับส่วนนี้ไป');
+      });
+      // หักลบกันเป็นคู่ (A↔B) แล้วจัดกลุ่มตามคนที่ต้องโอน
+      const tx = [];
+      R.people.forEach(a => R.people.forEach(b => {
+        if (a.id >= b.id) return;
+        const n = ((owe[a.id] || {})[b.id] || 0) - ((owe[b.id] || {})[a.id] || 0);
+        if (n > 0) tx.push({ from: a.name, fromId: a.id, to: b.name, toId: b.id, amount: n });
+        else if (n < 0) tx.push({ from: b.name, fromId: b.id, to: a.name, toId: a.id, amount: -n });
+      }));
+      tx.forEach(t => { st[t.fromId].net -= t.amount; st[t.toId].net += t.amount; });
+      const groups = [];
+      tx.sort((x, y) => x.from.localeCompare(y.from) || y.amount - x.amount).forEach(t => {
+        let g = groups.find(x => x.id === t.fromId); if (!g) groups.push(g = { id: t.fromId, from: t.from, total: 0, items: [] });
+        g.total += t.amount; g.items.push({ to: t.to, toId: t.toId, amount: t.amount / 100 });
+      });
+      return { warn, vinfo, groups: groups.map(g => ({ ...g, total: g.total / 100 })), tx: tx.map(t => ({ ...t, amount: t.amount / 100 })),
+        people: Object.values(st).map(x => ({ ...x, consumed: x.consumed / 100, paid: x.paid / 100, net: x.net / 100, owes: x.net < 0, settled: x.net === 0 })) };
+    });
+    const summaryData = calc;
+    const venueTotal = computed(() => (calc.value.vinfo[activeTab.value] || 0) / 100);
+    const copySummary = async () => {
+      const S = calc.value;
+      const lines = ['🍻 ' + roomData.value.name, ...(S.tx.length ? S.tx.map(t => t.from + ' ➜ ' + t.to + ' ฿' + t.amount.toFixed(2)) : ['ทุกคนเคลียร์กันครบแล้ว ✅'])];
+      toast(await copyText(lines.join(NL)) ? 'คัดลอกสรุปแล้ว วางใน LINE ได้เลย' : 'คัดลอกไม่สำเร็จ');
+    };
+
+    onMounted(async () => {
+      loadSettings(); await initFirebase();
+      const r = new URLSearchParams(location.search).get('room'); if (r) loadRoom(r);
+      document.getElementById('boot')?.remove();
+    });
+
+    return { showSettings, online, fbError, settings, saveSettings, isAdmin, currentRoom, status, roomErr, roomData, isExpired, isReadonly,
+      activeTab, activeVenue, newTripName, createTrip, copyLink, leaveRoom, addVenue, setVenue, newPersonName, addPerson, removePerson,
+      addItem, removeItem, setItem, toggleClaim, claimAll, lockRoom, unlockRoom, isScanning, scanErr, handleScanBill,
+      addPayment, setPayment, removePayment, payPid, payEdit, payForm, hasPay, payInfo, payName, openPay, savePay, pickQr, copyAcct,
+      summaryData, venueTotal, copySummary, toastMsg, modelOptions, testKey, testing, testMsg, testOk };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
