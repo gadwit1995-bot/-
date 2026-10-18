@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ขุนช้างคิดเงิน</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+[v-cloak]{display:none}
+:root{--paper:#F4F5F9;--ink:#161A2E;--mute:#666C85;--line:#E3E6EF;--acc:#0B7F72;--acc-soft:#E3F3F0;--owe:#C0364F;--owe-soft:#FCEBEE;--warn:#FFF3D6;--warn-ink:#7A4E00}
+body{font-family:'IBM Plex Sans Thai','Noto Sans Thai','Sarabun',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
+#app{box-shadow:0 0 0 1px var(--line)}
+input,select,textarea{font-size:16px;font-family:inherit}
+button,label{touch-action:manipulation}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.t-mute{color:var(--mute)}.t-owe{color:var(--owe)}.t-acc{color:var(--acc)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:14px;font-weight:600;transition:background-color .15s}
+.btn:disabled{opacity:.5}
+.btn-pri{background:var(--acc);color:#fff}.btn-pri:active{background:#09665C}
+.btn-soft{background:var(--acc-soft);color:var(--acc)}
+.btn-line{border:1.5px dashed #C3C8DA;color:var(--mute);background:#fff}
+.btn-bad{background:var(--owe);color:#fff}
+.btn-ghost{background:#EEF0F7;color:var(--ink)}
+.btn-sm{width:auto;min-height:38px;padding:0 16px;font-size:14px;border-radius:999px}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;color:var(--mute);font-size:24px;line-height:1}
+.icon-btn:active{background:#EEF0F7}
+.fld{width:100%;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.fld:disabled{background:#F7F8FB;color:var(--mute)}
+.fld-plain{min-height:44px;background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0 2px;width:100%;color:var(--ink)}
+textarea.fld{padding:12px 14px}
+.lbl{display:block;font-size:13px;font-weight:600;color:var(--mute);margin-bottom:6px}
+.hint{font-size:13px;color:var(--mute);margin-top:6px;line-height:1.5}
+.pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:#EEF0F7;font-size:12px;font-weight:600;color:var(--mute)}
+.pill.bad{background:var(--owe-soft);color:var(--owe)}.pill.ok{background:var(--acc-soft);color:var(--acc)}
+.dot{width:8px;height:8px;border-radius:50%;background:#B7BCCE}.dot.on{background:#17A673}
+.tabs{display:flex;overflow-x:auto;white-space:nowrap;padding:0 8px;background:#fff;border-bottom:1px solid var(--line);scrollbar-width:none}
+.tabbtn{padding:14px 14px 12px;font-size:15px;font-weight:500;color:var(--mute);border-bottom:3px solid transparent}
+.tab-active{color:var(--ink);font-weight:700;border-bottom-color:var(--acc)}
+.chip{min-height:38px;padding:0 16px;border-radius:999px;background:#EEF0F7;color:#394058;font-size:14px;font-weight:500;transition:background-color .12s,color .12s}
+.chip[aria-pressed=true]{background:var(--acc);color:#fff}
+.chip:disabled{opacity:.65}
+.chip-all{background:#fff;border:1px solid var(--acc);color:var(--acc)}
+.person{display:inline-flex;align-items:center;gap:2px;min-height:36px;padding:0 4px 0 14px;border-radius:999px;background:#EEF0F7;font-size:14px;font-weight:500}
+.person button{width:32px;height:32px;font-size:20px;color:var(--mute)}
+.sec{padding:20px}
+.h3{font-size:17px;font-weight:700;margin-bottom:12px}
+.note{padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;margin-bottom:12px}
+.note.warn{background:var(--warn);color:var(--warn-ink)}.note.bad{background:var(--owe-soft);color:var(--owe);font-weight:600}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;border-radius:16px;background:var(--acc-soft)}
+.avatar{flex:none;width:42px;height:42px;border-radius:50%;background:var(--acc-soft);color:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:700}
+.row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.stub{position:relative;display:flex;justify-content:space-between;align-items:stretch;gap:14px;padding:16px 20px;margin-bottom:12px;background:var(--acc-soft);border-radius:16px}
+.stub::before,.stub::after{content:"";position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;transform:translateY(-50%)}
+.stub::before{left:-8px}.stub::after{right:-8px}
+.stub-amt{display:flex;align-items:center;padding-left:16px;border-left:2px dashed #93C9C1;font-size:20px;font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:80;max-width:90%;padding:10px 18px;border-radius:999px;background:var(--ink);color:#fff;font-size:14px;text-align:center}
+.mascot{mix-blend-mode:multiply;display:block;object-fit:contain}.mascot-mini{width:40px;height:40px;flex:none}
+.name-area{resize:none;overflow:hidden;line-height:1.45;padding:10px 2px;min-height:44px;display:block;overflow-wrap:anywhere;word-break:break-word}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;flex:none}
+.step button{width:40px;height:40px;font-size:20px;color:var(--ink);border-radius:999px}.step button:disabled{opacity:.3}
+.step b{min-width:28px;text-align:center;font-size:16px}
+.crow{display:flex;align-items:center;gap:8px;padding:6px 0}.crow .cname{flex:1;min-width:0;overflow-wrap:anywhere;font-size:15px;font-weight:500}
+.xcard{border:2px solid var(--owe);border-radius:18px;overflow:hidden;margin-bottom:16px;background:#fff}
+.xhead{display:flex;align-items:center;gap:12px;padding:16px;background:var(--owe-soft)}
+.xav{background:var(--owe);color:#fff;width:48px;height:48px;font-size:20px}
+.xlbl{font-size:12px;font-weight:600;color:var(--mute)}
+.xname{font-size:26px;font-weight:800;line-height:1.2;overflow-wrap:anywhere;color:var(--owe)}
+.xtot{font-size:22px;font-weight:800;color:var(--owe)}
+.xrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px dashed #E8B5BF}
+.xto{font-size:19px;font-weight:700;overflow-wrap:anywhere}.xamt{font-size:20px;font-weight:700}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div id="boot" class="p-6 text-center text-gray-500">กำลังโหลด...</div>
+<script>setTimeout(function(){var b=document.getElementById('boot');if(b)b.textContent='โหลดแอปไม่สำเร็จ — เช็กอินเทอร์เน็ตหรือปิดตัวบล็อกโฆษณา แล้วรีเฟรช';},10000);</script>
+
+<div id="app" v-cloak class="max-w-md mx-auto min-h-screen bg-white relative pb-24">
+
+  <header class="h-14 px-5 flex items-center justify-between sticky top-0 z-50 bg-white border-b" style="border-color:var(--line)">
+    <div class="flex items-center gap-2 min-w-0"><img :src="mascot" alt="" class="mascot mascot-mini"><h1 class="font-bold text-lg tracking-tight">ขุนช้างคิดเงิน</h1></div>
+    <div class="flex items-center gap-1">
+      <span class="pill"><i class="dot" :class="connected ? 'on' : ''"></i>{{ online ? (connected ? 'ออนไลน์' : 'กำลังเชื่อมต่อ...') : (fbError ? 'Firebase มีปัญหา' : 'ในเครื่องนี้') }}</span>
+      <button v-if="canSettings" @click="showSettings = true" class="icon-btn" aria-label="ตั้งค่า"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button>
+    </div>
+  </header>
+
+  <div v-if="toastMsg" class="toast" role="status">{{ toastMsg }}</div>
+
+  <div v-if="payPid" class="fixed inset-0 z-[75] flex items-end justify-center" style="background:rgba(22,26,46,.5)" @click.self="payPid = null">
+    <div class="bg-white w-full max-w-md rounded-t-3xl p-5 pb-8 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-2 min-w-0"><img :src="mascot" alt="" class="mascot mascot-mini"><h3 class="text-lg font-bold">ช่องทางรับเงินของ {{ payName }}</h3></div>
+        <button @click="payPid = null" class="icon-btn" aria-label="ปิด">&times;</button>
+      </div>
+      <div v-if="payEdit">
+        <label class="lbl" for="pa">เลขบัญชีหรือพร้อมเพย์</label>
+        <input id="pa" type="text" v-model="payForm.acct" class="fld mb-4" placeholder="เช่น กสิกร 123-4-56789-0 ชื่อ-สกุล">
+        <label class="lbl">รูป QR Code (ไม่บังคับ)</label>
+        <img v-if="payForm.qr" :src="payForm.qr" class="w-48 h-48 object-contain mx-auto mb-3 border rounded-xl" alt="QR Code">
+        <label class="btn btn-soft mb-4 cursor-pointer">{{ payForm.qr ? 'เปลี่ยนรูป QR' : 'เลือกรูป QR' }}<input type="file" accept="image/*" @change="pickQr" class="hidden"></label>
+        <button @click="savePay" class="btn btn-pri">บันทึก</button>
+      </div>
+      <div v-else>
+        <img v-if="payInfo.qr" :src="payInfo.qr" class="w-full max-w-xs object-contain mx-auto mb-4 rounded-xl border" alt="QR Code">
+        <div v-if="payInfo.acct" class="note" style="background:#EEF0F7;font-size:17px;font-weight:600;word-break:break-all">{{ payInfo.acct }}</div>
+        <button v-if="payInfo.acct" @click="copyAcct" class="btn btn-soft mb-3">คัดลอกเลขบัญชี</button>
+        <button @click="payEdit = true" class="btn btn-ghost">แก้ไข</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ตั้งค่า -->
+  <div v-if="showSettings && canSettings" class="fixed inset-0 bg-white z-[70] overflow-y-auto">
+    <div class="max-w-md mx-auto p-5 pb-16">
+      <h2 class="text-2xl font-bold mb-6">ตั้งค่า</h2>
+
+      <div class="mb-6">
+        <label class="lbl" for="pin">รหัส Admin (PIN)</label>
+        <input id="pin" type="password" v-model="settings.adminPin" class="fld" placeholder="ตั้งรหัสสำหรับล็อกบิล">
+        <p class="hint">ใช้รหัสเดิมในเครื่องอื่นเพื่อเป็นเจ้าของห้องที่สร้างไว้</p>
+      </div>
+
+      <div class="mb-6">
+        <label class="lbl" for="gk">Gemini API Key (ฟรี) สำหรับสแกนบิล</label>
+        <input id="gk" type="password" v-model="settings.geminiKey" class="fld" placeholder="วาง Key จาก AI Studio" autocomplete="off">
+        <label class="lbl mt-4" for="gm">โมเดล</label>
+        <select id="gm" v-model="settings.geminiModel" class="fld">
+          <option v-for="m in modelOptions" :key="m" :value="m">{{ m }}</option>
+        </select>
+        <button @click="testKey" :disabled="testing || !settings.geminiKey" class="btn btn-soft mt-3">{{ testing ? 'กำลังทดสอบ...' : 'ทดสอบ Key และโมเดล' }}</button>
+        <p v-if="testMsg" class="note mt-3" :class="testOk ? '' : 'bad'" :style="testOk ? 'background:var(--acc-soft);color:var(--acc);font-weight:600' : ''">{{ testMsg }}</p>
+        <p class="hint">เก็บในเครื่องนี้เท่านั้น และส่งไปที่ Google เฉพาะตอนสแกน</p>
+      </div>
+
+      <div class="mb-8">
+        <label class="lbl" for="fc">Firebase Config</label>
+        <textarea id="fc" v-model="settings.firebaseConfig" class="fld h-32" placeholder="วางทั้งก้อนจาก Firebase Console (ต้องมี databaseURL)"></textarea>
+        <p class="hint">เจ้าของกรอกเครื่องเดียวพอ ปุ่ม "แชร์ลิงก์" จะพ่วงค่านี้ไปในลิงก์ให้เพื่อนอัตโนมัติ เพื่อนไม่ต้องตั้งค่าอะไร</p>
+        <button @click="testFb" :disabled="fbTesting" class="btn btn-soft mt-3">{{ fbTesting ? 'กำลังทดสอบ...' : 'ทดสอบ Firebase' }}</button>
+        <p v-if="fbMsg" class="note mt-3" :class="fbOk ? '' : 'bad'" :style="fbOk ? 'background:var(--acc-soft);color:var(--acc);font-weight:600' : ''">{{ fbMsg }}</p>
+        <p v-if="fbError" class="note bad mt-3">{{ fbError }}</p>
+      </div>
+
+      <button @click="saveSettings" class="btn btn-pri mb-3">บันทึก</button>
+      <button @click="showSettings = false" class="btn btn-ghost">ปิด</button>
+    </div>
+  </div>
+
+  <!-- หน้าแรก -->
+  <div v-if="!currentRoom" class="px-6 pt-6 pb-8">
+    <img :src="mascot" alt="ขุนช้าง ตัวการ์ตูนประจำแอป" class="mascot mx-auto mb-2" style="width:210px;height:210px">
+    <h2 class="text-3xl font-bold leading-tight mb-3">เริ่มทริปใหม่</h2>
+    <p class="t-mute mb-8 leading-relaxed">สร้างลิงก์แล้วส่งเข้า LINE ให้เพื่อนเข้ามาจิ้มรายการที่ตัวเองกิน ระบบหารและบอกว่าใครต้องโอนให้ใคร</p>
+    <label class="lbl" for="tn">ชื่อทริป</label>
+    <input id="tn" type="text" v-model="newTripName" @keyup.enter="createTrip" class="fld mb-4" placeholder="เช่น วันเกิดเอก">
+    <button @click="createTrip" :disabled="creating" class="btn btn-pri">{{ creating ? 'กำลังสร้าง...' : 'สร้างทริป (ลิงก์อายุ 3 วัน)' }}</button>
+    <p v-if="settings.adminPin" class="hint text-center">ตั้ง PIN เจ้าของแล้ว</p>
+    <p v-if="!online" class="note warn mt-6">ตอนนี้ข้อมูลอยู่ในเครื่องนี้เท่านั้น เพื่อนที่เปิดลิงก์จะไม่เห็นห้อง ต้องตั้งค่า Firebase ก่อนถึงจะแชร์ได้</p>
+    <p v-if="fbError && canSettings" class="note bad mt-6">Firebase มีปัญหา: {{ fbError }} (ไปที่ตั้งค่า แล้วกด "ทดสอบ Firebase")</p>
+    <div v-if="canSettings && savedBills.length" class="mt-10">
+      <h3 class="h3">บิลที่บันทึกไว้</h3>
+      <div v-for="h in savedBills" :key="h.id" class="row">
+        <button @click="viewSaved(h.id)" class="flex-1 min-w-0 text-left">
+          <div class="font-semibold" style="overflow-wrap:anywhere">{{ h.name }}</div>
+          <div class="text-xs t-mute">{{ fmtDate(h.savedAt) }} · ฿{{ h.total.toFixed(2) }}</div>
+        </button>
+        <button @click="deleteSaved(h.id)" class="icon-btn" aria-label="ลบบิลที่บันทึก">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ห้อง -->
+  <div v-else class="flex flex-col">
+    <div v-if="status === 'loading'" class="p-10 text-center t-mute">กำลังโหลดห้อง...</div>
+    <div v-else-if="status !== 'ok'" class="p-8 text-center">
+      <p class="text-lg font-bold mb-2">{{ status === 'error' ? 'เปิดห้องไม่ได้' : 'ไม่พบห้องนี้' }}</p>
+      <p class="t-mute text-sm mb-6 leading-relaxed">{{ status === 'error' ? roomErr : (online ? 'ลิงก์อาจผิดหรือห้องถูกลบแล้ว' : 'ลิงก์นี้ไม่มีข้อมูลเชื่อมต่อ ให้เจ้าของกด "แชร์ลิงก์" ในแอปแล้วส่งลิงก์ใหม่') }}</p>
+      <button @click="leaveRoom" class="btn btn-ghost btn-sm mx-auto">กลับหน้าหลัก</button>
+    </div>
+
+    <template v-else>
+      <div class="px-5 pt-4 pb-3 flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <button @click="leaveRoom" class="text-sm t-mute mb-1">‹ หน้าหลัก</button>
+          <h2 class="text-xl font-bold truncate">{{ roomData.name }}</h2>
+          <div v-if="roomData.isLocked || isAdmin" class="flex gap-2 mt-2">
+            <span v-if="roomData.isLocked" class="pill bad">ล็อกแล้ว</span>
+            <span v-if="isAdmin" class="pill ok">เจ้าของ</span>
+          </div>
+        </div>
+        <button v-if="!viewingSaved" @click="copyLink" class="btn btn-soft btn-sm shrink-0 mt-5">แชร์ลิงก์</button>
+      </div>
+
+      <div v-if="viewingSaved" class="note warn mx-5 flex items-center justify-between gap-3">
+        <span>กำลังดูบิลที่บันทึกไว้ (อ่านอย่างเดียว)</span>
+        <button @click="deleteSaved(savedId)" class="btn btn-bad btn-sm shrink-0">ลบบิลนี้</button>
+      </div>
+      <div v-if="isExpired" class="note bad mx-5">ลิงก์นี้หมดอายุแล้ว ดูได้อย่างเดียว</div>
+
+      <div class="tabs sticky top-14 z-40">
+        <button v-for="(v, idx) in roomData.venues" :key="idx" @click="activeTab = idx" class="tabbtn" :class="activeTab === idx ? 'tab-active' : ''">ร้าน {{ idx + 1 }}</button>
+        <button @click="activeTab = 'summary'" class="tabbtn" :class="activeTab === 'summary' ? 'tab-active' : ''">สรุปยอด</button>
+        <button v-if="isAdmin && !isReadonly" @click="addVenue" class="tabbtn t-acc font-bold">+ เพิ่มร้าน</button>
+      </div>
+
+      <!-- ร้าน -->
+      <div v-if="activeVenue" class="sec">
+        <input :value="activeVenue.name" @change="setVenue('name', $event.target.value)" :disabled="isReadonly" class="fld-plain text-xl font-bold mb-5" placeholder="ชื่อร้าน" aria-label="ชื่อร้าน">
+
+        <label class="lbl">ใครจ่ายไปก่อน (ใส่ได้หลายคน)</label>
+        <div v-for="(x, i) in activeVenue.payments" :key="i" class="flex gap-2 mb-2">
+          <select :value="x.pid" @change="setPayment(i, 'pid', $event.target.value)" :disabled="isReadonly" class="fld flex-1 min-w-0" aria-label="คนจ่าย">
+            <option value="">เลือกคนจ่าย</option>
+            <option v-for="p in roomData.people" :key="p.id" :value="p.id">{{ p.name }}</option>
+          </select>
+          <input type="number" inputmode="decimal" :value="x.amount || ''" @change="setPayment(i, 'amount', $event.target.value)" :disabled="isReadonly" class="fld w-28 text-right" :placeholder="activeVenue.payments.length === 1 ? 'เต็มบิล' : 'ยอดที่จ่าย'" aria-label="ยอดที่จ่าย">
+          <button v-if="!isReadonly" @click="removePayment(i)" class="icon-btn" aria-label="ลบคนจ่าย">&times;</button>
+        </div>
+        <button v-if="!isReadonly" @click="addPayment" class="btn btn-line mb-5" style="min-height:44px">+ เพิ่มคนจ่าย</button>
+        <div v-else class="mb-5"></div>
+
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <div><label class="lbl">Service</label>
+            <select :value="activeVenue.svc" @change="setVenue('svc', $event.target.value)" :disabled="isReadonly" class="fld px-2"><option value="0">ไม่มี</option><option value="10">10%</option></select></div>
+          <div><label class="lbl">VAT</label>
+            <select :value="activeVenue.vat" @change="setVenue('vat', $event.target.value)" :disabled="isReadonly" class="fld px-2"><option value="0">ไม่มี</option><option value="7">7%</option></select></div>
+          <div><label class="lbl">ส่วนลด ฿</label>
+            <input type="number" inputmode="decimal" :value="activeVenue.discount" @change="setVenue('discount', $event.target.value)" :disabled="isReadonly" class="fld px-2"></div>
+        </div>
+        <div class="total mb-8">
+          <div><div class="text-sm font-semibold">ยอดบิลร้านนี้</div><div class="text-xs t-mute">เทียบกับใบเสร็จจริงได้เลย</div></div>
+          <div class="text-2xl font-bold">฿{{ venueTotal.toFixed(2) }}</div>
+        </div>
+
+        <h3 class="h3">เพื่อนในโต๊ะ</h3>
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span v-for="p in roomData.people" :key="p.id" class="person">{{ p.name }}<button v-if="!isReadonly" @click="removePerson(p.id)" :aria-label="'ลบ ' + p.name">&times;</button></span>
+          <span v-if="roomData.people.length === 0" class="hint" style="margin:0">ยังไม่มีใคร เพิ่มชื่อด้านล่าง</span>
+        </div>
+        <div class="flex gap-2 mb-8" v-if="!isReadonly">
+          <input type="text" v-model="newPersonName" @keyup.enter="addPerson" class="fld flex-1" placeholder="ชื่อเพื่อน" aria-label="ชื่อเพื่อน">
+          <button @click="addPerson" class="btn btn-ghost btn-sm" style="min-height:48px;border-radius:12px">เพิ่ม</button>
+        </div>
+
+        <div class="flex justify-between items-center mb-1">
+          <h3 class="h3" style="margin:0">รายการที่สั่ง</h3>
+          <label v-if="settings.geminiKey && !isReadonly" class="btn btn-soft btn-sm cursor-pointer">สแกนบิล
+            <input type="file" accept="image/*" @change="handleScanBill" class="hidden" :disabled="isScanning">
+          </label>
+        </div>
+        <div v-if="isScanning" class="note warn mt-3 animate-pulse">AI กำลังอ่านบิล รอสักครู่...</div>
+        <div v-if="scanErr" class="note bad mt-3" @click="scanErr = ''">{{ scanErr }} <span class="text-xs font-normal">(แตะเพื่อปิด)</span></div>
+
+        <div v-for="item in activeVenue.items" :key="item.id" class="py-4 border-b" style="border-color:var(--line)">
+          <div class="flex items-start gap-2">
+            <textarea v-autogrow rows="1" :value="item.name" @change="setItem(item.id, 'name', $event.target.value)" @keydown.enter.prevent="$event.target.blur()" :disabled="isReadonly" class="fld-plain name-area flex-1 min-w-0 font-semibold" placeholder="ชื่อเมนู" aria-label="ชื่อเมนู"></textarea>
+            <button v-if="!isReadonly" @click="removeItem(item.id)" class="icon-btn" aria-label="ลบเมนู">&times;</button>
+          </div>
+          <div class="flex items-center justify-between gap-3 mt-2">
+            <div class="step" role="group" aria-label="จำนวนที่สั่ง">
+              <button @click="setItem(item.id, 'qty', (item.qty || 1) - 1)" :disabled="isReadonly || (item.qty || 1) <= 1" aria-label="ลดจำนวน">&minus;</button>
+              <b>{{ item.qty || 1 }}</b>
+              <button @click="setItem(item.id, 'qty', (item.qty || 1) + 1)" :disabled="isReadonly" aria-label="เพิ่มจำนวน">+</button>
+            </div>
+            <div class="flex items-center gap-2"><span class="text-xs t-mute">ชิ้นละ ฿</span>
+              <input type="number" inputmode="decimal" :value="item.price" @change="setItem(item.id, 'price', $event.target.value)" :disabled="isReadonly" class="fld w-24 text-right" placeholder="ราคา" aria-label="ราคาต่อชิ้น"></div>
+          </div>
+          <p v-if="(item.qty || 1) > 1" class="text-sm t-mute text-right mt-1">รวม ฿{{ ((item.price || 0) * (item.qty || 1)).toFixed(2) }}</p>
+          <p class="text-[13px] mt-3 mb-2" :class="itemInfo(item).bad ? 't-owe font-semibold' : 't-mute'">{{ itemInfo(item).t }}</p>
+          <div v-if="(item.qty || 1) <= 1" class="flex flex-wrap gap-2">
+            <button v-for="p in roomData.people" :key="p.id" @click="toggleClaim(item.id, p.id)" :disabled="isReadonly" class="chip" :aria-pressed="!!item.claims[p.id]">{{ p.name }}</button>
+            <button v-if="!isReadonly" @click="claimAll(item.id)" class="chip chip-all">ทุกคน</button>
+          </div>
+          <div v-else>
+            <div v-for="p in roomData.people" :key="p.id" class="crow">
+              <span class="cname">{{ p.name }}</span>
+              <div class="step">
+                <button @click="stepClaim(item.id, p.id, -1)" :disabled="isReadonly || item.claims[p.id] === 'all' || !cnt(item, p.id)" :aria-label="'ลดจำนวนที่ ' + p.name + ' กิน'">&minus;</button>
+                <b>{{ item.claims[p.id] === 'all' ? '–' : cnt(item, p.id) }}</b>
+                <button @click="stepClaim(item.id, p.id, 1)" :disabled="isReadonly || item.claims[p.id] === 'all' || itemInfo(item).used >= (item.qty || 1)" :aria-label="'เพิ่มจำนวนที่ ' + p.name + ' กิน'">+</button>
+              </div>
+              <button @click="setClaim(item.id, p.id, item.claims[p.id] === 'all' ? null : 'all')" :disabled="isReadonly" class="chip" :aria-pressed="item.claims[p.id] === 'all'">ทั้งหมด</button>
+            </div>
+            <button v-if="!isReadonly" @click="claimAll(item.id)" class="chip chip-all mt-2">ทุกคนหารเท่ากัน</button>
+          </div>
+        </div>
+        <button v-if="!isReadonly" @click="addItem" class="btn btn-line mt-4">+ เพิ่มเมนู</button>
+      </div>
+
+      <!-- สรุปยอด -->
+      <div v-if="activeTab === 'summary'" class="sec">
+        <div v-if="summaryData.warn.length" class="note warn">
+          <div v-for="(w, i) in summaryData.warn" :key="i">{{ w }}</div>
+        </div>
+        <div v-if="roomData.people.length === 0" class="t-mute text-center py-10"><img :src="mascot" alt="" class="mascot mx-auto mb-3" style="width:130px;height:130px">ยังไม่มีข้อมูล เพิ่มเพื่อนและรายการในแท็บร้านก่อน</div>
+        <div v-else>
+          <h3 class="h3">ใครต้องโอนให้ใคร</h3>
+          <div v-if="summaryData.groups.length === 0" class="text-center"><img :src="mascot" alt="" class="mascot mx-auto" style="width:150px;height:150px"><div class="stub" style="justify-content:center"><span class="font-semibold t-acc">เคลียร์กันครบแล้ว</span></div></div>
+          <div v-for="g in summaryData.groups" :key="g.id" class="xcard">
+            <div class="xhead">
+              <div class="avatar xav">{{ g.from.charAt(0) }}</div>
+              <div class="min-w-0 flex-1"><div class="xlbl">ต้องโอนเงิน</div><div class="xname">{{ g.from }}</div></div>
+              <div class="text-right shrink-0"><div class="xlbl">รวม</div><div class="xtot">฿{{ g.total.toFixed(2) }}</div></div>
+            </div>
+            <div v-for="t in g.items" :key="t.toId" class="xrow">
+              <div class="min-w-0 flex-1">
+                <div class="xlbl">โอนให้</div>
+                <div class="xto">{{ t.to }}</div>
+                <button @click="openPay(t.toId)" class="text-sm font-semibold t-acc mt-1">{{ hasPay(t.toId) ? 'ดู QR / เลขบัญชี' : 'ยังไม่มีช่องทางรับเงิน' }}</button>
+              </div>
+              <div class="xamt">฿{{ t.amount.toFixed(2) }}</div>
+            </div>
+          </div>
+          <button @click="copySummary" class="btn btn-pri mt-2 mb-8">คัดลอกสรุปส่ง LINE</button>
+
+          <h3 class="h3">ยอดรายคน</h3>
+          <div v-for="p in summaryData.people" :key="p.id" class="row">
+            <div class="avatar">{{ p.name.charAt(0) }}</div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold truncate">{{ p.name }}</div>
+              <div class="text-xs t-mute">กินไป ฿{{ p.consumed.toFixed(2) }} จ่ายไปก่อน ฿{{ p.paid.toFixed(2) }}</div>
+              <button @click="openPay(p.id)" class="text-xs font-semibold t-acc mt-1">{{ hasPay(p.id) ? 'ดูช่องทางรับเงิน' : 'ใส่ช่องทางรับเงิน' }}</button>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-semibold" :class="p.settled ? 't-mute' : (p.owes ? 't-owe' : 't-acc')">{{ p.settled ? 'เคลียร์แล้ว' : (p.owes ? 'ต้องจ่าย' : 'ได้คืน') }}</div>
+              <div class="text-lg font-bold">฿{{ Math.abs(p.net).toFixed(2) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="isAdmin" class="mt-10">
+          <button @click="saveBill" class="btn btn-soft mb-3">บันทึกบิลไว้ดูภายหลัง</button>
+          <button v-if="!roomData.isLocked" @click="lockRoom" class="btn btn-bad">ล็อกบิล (ปิดแก้ไข)</button>
+          <button v-else @click="unlockRoom" class="btn btn-ghost">ปลดล็อกบิล</button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<script type="module">
+import { createApp, ref, computed, watch, onMounted } from 'https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.esm-browser.prod.js';
+
+/* ===== ตั้งค่า (แก้ก่อนอัปขึ้น GitHub) =====
+   Firebase web config ไม่ใช่ความลับ (ความปลอดภัยอยู่ที่ Database Rules) ใส่ในไฟล์ได้
+   เพื่อให้เพื่อนที่เปิดลิงก์ใช้งานได้ทันทีโดยไม่ต้องตั้งค่าอะไร
+   ต้องมี databaseURL เช่น https://xxx-default-rtdb.asia-southeast1.firebasedatabase.app */
+const FIREBASE_CONFIG = {
+  // apiKey: "...", authDomain: "...", databaseURL: "...", projectId: "...", appId: "..."
+};
+const DEFAULT_MODEL = 'gemini-3.5-flash';
+const FB = 'https://www.gstatic.com/firebasejs/10.8.0/';
+const GEMINI = 'https://generativelanguage.googleapis.com/v1beta/';
+const SK = 'partyBillSettings', LK = 'localRoom_';
+const NL = String.fromCharCode(10);
+const MASCOT = 'data:image/webp;base64,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'; // ขุนช้าง (ฝังในไฟล์ ไม่ต้องอัปรูปแยก)
+['icon', 'apple-touch-icon'].forEach(r => { const l = document.createElement('link'); l.rel = r; l.href = MASCOT; document.head.appendChild(l); });
+const HK = 'partyBillHistory';
+const viaLink = !!new URLSearchParams(location.search).get('room'); // เปิดจากลิงก์ที่แชร์ = ไม่ใช่เจ้าของ
+const fit = el => { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; };
+
+const uid = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => b.toString(36).padStart(2, '0')).join('');
+const arr = x => (x ? Object.values(x) : []);
+const sha = async s => {
+  try { return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))), b => b.toString(16).padStart(2, '0')).join(''); }
+  catch { let h = 5381; for (const c of s) h = ((h << 5) + h + c.charCodeAt(0)) | 0; return 'x' + h; }
+};
+const b64u = s => btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const hashCfg = () => { // ค่าเชื่อมต่อ Firebase ที่พ่วงมากับลิงก์ (#c=...) เพื่อให้เพื่อนไม่ต้องตั้งค่าเอง
+  const m = location.hash.match(/[#&]c=([\w-]+)/); if (!m) return null;
+  try { const c = JSON.parse(atob(m[1].replace(/-/g, '+').replace(/_/g, '/'))); return c && /^https:\/\//.test(c.databaseURL || '') ? c : null; } catch { return null; }
+};
+const withTimeout = (p, ms, msg) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(msg)), ms))]);
+const parseCfg = s => { // รับได้ทั้ง JSON และก้อน JS จาก Firebase Console (รองรับ comment, เครื่องหมายคำพูดโค้ง, ; ท้ายก้อน)
+  const m = (s || '').replace(/[\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'").match(/\{[\s\S]*\}/); if (!m) return null;
+  const t = m[0].replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:"'\w])\/\/.*$/gm, '$1');
+  try {
+    const c = JSON.parse(t.replace(/'/g, '"').replace(/([{,]\s*)([A-Za-z_]\w*)\s*:/g, '$1"$2":').replace(/,\s*}/g, '}'));
+    if (c && c.databaseURL) c.databaseURL = String(c.databaseURL).trim().replace(/\/+$/, '');
+    return c;
+  } catch { return null; }
+};
+const checkCfg = c => !c.apiKey ? 'Config ไม่มี apiKey — คัดลอกทั้งก้อนจาก Firebase Console ให้ครบ'
+  : !c.databaseURL ? 'Config ไม่มี databaseURL — สร้าง Realtime Database ใน Firebase ก่อน แล้วคัดลอก Config ใหม่'
+  : !/^https:\/\/[^/\s]+$/.test(c.databaseURL) ? 'databaseURL ต้องเป็นแบบ https://ชื่อ.firebasedatabase.app (ไม่มี path ต่อท้าย)' : '';
+// Firebase ทิ้ง array ว่าง/แปลง array เป็น object -> ทำให้โครงสร้างกลับมาครบเสมอ
+const normClaims = i => { const c = { ...(i.claims || {}) }; arr(i.claimants).forEach(id => { if (!(id in c)) c[id] = 'all'; }); return c; };
+const norm = d => {
+  d.people = arr(d.people); d.pay = d.pay || {};
+  d.venues = arr(d.venues).map(v => ({ name: '', payer: '', svc: 0, vat: 0, discount: 0, ...v,
+    payments: arr(v.payments).length ? arr(v.payments) : (v.payer ? [{ pid: v.payer, amount: 0 }] : []),
+    items: arr(v.items).map(i => { const o = { name: '', price: 0, qty: 1, ...i, id: i.id || uid(), claims: normClaims(i) }; delete o.claimants; return o; }) }));
+  return d;
+};
+const copyText = async t => {
+  try { await navigator.clipboard.writeText(t); return true; } catch {
+    const a = document.createElement('textarea'); a.value = t; a.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(a); a.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch {} a.remove(); return ok;
+  }
+};
+const shrink = (file, max = 2000, q = 0.85) => new Promise((res, rej) => { // ย่อรูปจากมือถือ (5-10MB) ก่อนส่ง
+  const img = new Image(), url = URL.createObjectURL(file);
+  img.onload = () => {
+    const s = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+    res(c.toDataURL('image/jpeg', q).split(',')[1]);
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('เปิดรูปนี้ไม่ได้ (ถ้าเป็น HEIC ให้ถ่ายใหม่หรือแปลงเป็น JPG)')); };
+  img.src = url;
+});
+const errText = e => {
+  const m = e.message || String(e);
+  if (e instanceof TypeError) return 'เชื่อมต่อ Google ไม่ได้ (เช็กอินเทอร์เน็ต / ปิดตัวบล็อกโฆษณา)';
+  if (e instanceof SyntaxError) return 'AI ตอบกลับผิดรูปแบบ ลองสแกนใหม่อีกครั้ง';
+  if (e.status === 400 && /api key/i.test(m)) return 'API Key ไม่ถูกต้อง (คัดลอกให้ครบ ไม่มีช่องว่าง/เครื่องหมายคำพูด)';
+  if (e.status === 403) return 'Key ถูกปฏิเสธหรือถูกจำกัดสิทธิ์: ' + m;
+  if (e.status === 404) return 'ไม่พบโมเดลนี้ (อาจถูกปิดบริการแล้ว) เลือกโมเดลใหม่ในตั้งค่า: ' + m;
+  if (e.status === 429) return 'โควต้าฟรีเต็มชั่วคราว รอ 1 นาทีแล้วลองใหม่';
+  return m;
+};
+
+createApp({
+  setup() {
+    const showSettings = ref(false), online = ref(false), fbError = ref('');
+    const settings = ref({ adminPin: '', geminiKey: '', geminiModel: DEFAULT_MODEL, firebaseConfig: '' });
+    const currentRoom = ref(null), status = ref('loading'), roomErr = ref('');
+    const roomData = ref({ name: '', expiresAt: 0, isLocked: false, adminHash: '', people: [], venues: [] });
+    const activeTab = ref(0), newTripName = ref(''), newPersonName = ref('');
+    const isScanning = ref(false), scanErr = ref(''), toastMsg = ref('');
+    const viewingSaved = ref(false), savedId = ref(''), savedBills = ref([]);
+    const connected = ref(false), creating = ref(false), fbTesting = ref(false), fbMsg = ref(''), fbOk = ref(false);
+    const models = ref([]), testing = ref(false), testMsg = ref(''), testOk = ref(false), myHash = ref('');
+    let db = null, F = null, roomRef = null, unsub = null, tt = null, activeCfg = null, initP = Promise.resolve();
+
+    const toast = (t, ms = 3500) => { toastMsg.value = t; clearTimeout(tt); tt = setTimeout(() => toastMsg.value = '', ms); };
+    const persist = () => { try { localStorage.setItem(SK, JSON.stringify(settings.value)); } catch {} };
+
+    /* ---------- Settings ---------- */
+    const loadSettings = () => { try { Object.assign(settings.value, JSON.parse(localStorage.getItem(SK) || '{}')); } catch {} };
+    const saveSettings = () => {
+      const s = settings.value;
+      s.adminPin = (s.adminPin || '').trim();
+      s.geminiKey = (s.geminiKey || '').trim().replace(/^["']|["']$/g, '');
+      s.firebaseConfig = (s.firebaseConfig || '').trim();
+      persist(); location.reload();
+    };
+
+    /* ---------- Firebase ---------- */
+    const initFirebase = async () => {
+      let cfg = FIREBASE_CONFIG; const hc = hashCfg();
+      if (!cfg.apiKey && hc) { cfg = hc; if (!settings.value.firebaseConfig) { settings.value.firebaseConfig = JSON.stringify(hc); persist(); } }
+      else if (!cfg.apiKey && settings.value.firebaseConfig) {
+        cfg = parseCfg(settings.value.firebaseConfig);
+        if (!cfg) { fbError.value = 'อ่าน Firebase Config ไม่ออก (วางทั้งก้อน { ... } จาก Console)'; return; }
+      }
+      if (cfg === FIREBASE_CONFIG && !cfg.apiKey && !cfg.databaseURL) return; // ยังไม่ได้ตั้งค่า = โหมดในเครื่อง
+      const err = checkCfg(cfg); if (err) { fbError.value = err; return; }
+      activeCfg = cfg;
+      try {
+        const [a, d] = await Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-database.js')]);
+        F = d; db = d.getDatabase(a.initializeApp(cfg)); online.value = true;
+        d.onValue(d.ref(db, '.info/connected'), s => { connected.value = !!s.val(); });
+      } catch (e) { fbError.value = 'เริ่ม Firebase ไม่ได้: ' + e.message; }
+    };
+    // ปุ่มทดสอบ: ต่อฐานข้อมูลได้ไหม + Rules อนุญาตเขียน rooms ไหม
+    const testFb = async () => {
+      fbTesting.value = true; fbMsg.value = ''; fbOk.value = false; let app, a;
+      try {
+        const cfg = FIREBASE_CONFIG.apiKey ? FIREBASE_CONFIG : parseCfg(settings.value.firebaseConfig);
+        if (!cfg) throw new Error('อ่าน Firebase Config ไม่ออก (วางทั้งก้อน { ... } จาก Console)');
+        const err = checkCfg(cfg); if (err) throw new Error(err);
+        let d; [a, d] = await Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-database.js')]);
+        app = a.initializeApp(cfg, 'test' + Date.now()); const tdb = d.getDatabase(app);
+        await withTimeout(new Promise(res => { const off = d.onValue(d.ref(tdb, '.info/connected'), s => { if (s.val()) { off(); res(); } }); }), 10000, 'ต่อฐานข้อมูลไม่ได้ — เช็ก databaseURL (ต้องตรงกับที่ Console แสดง) และอินเทอร์เน็ต');
+        const r = d.ref(tdb, 'rooms/_ping');
+        await withTimeout(d.set(r, { t: Date.now() }), 8000, 'เชื่อมต่อได้ แต่เขียนข้อมูลไม่สำเร็จ — เช็ก Database Rules');
+        await d.remove(r);
+        fbOk.value = true; fbMsg.value = '✅ เชื่อมต่อได้ และเขียนข้อมูลได้ (กด "บันทึก" เพื่อใช้งาน)';
+      } catch (e) {
+        fbMsg.value = '❌ ' + (/permission_denied/i.test(e.message + (e.code || '')) ? 'เชื่อมต่อได้ แต่ Rules ไม่อนุญาตให้เขียนที่ rooms — แก้ Database Rules แล้วลองใหม่' : (e.message || String(e)));
+      } finally { try { if (app) await a.deleteApp(app); } catch {} fbTesting.value = false; }
+    };
+
+    /* ---------- Room ---------- */
+    const loadRoom = id => {
+      if (!/^[A-Za-z0-9_-]{6,40}$/.test(id)) return toast('ลิงก์ห้องไม่ถูกต้อง');
+      if (unsub) { unsub(); unsub = null; }
+      viewingSaved.value = false; currentRoom.value = id; status.value = 'loading'; activeTab.value = 0;
+      if (db) {
+        roomRef = F.ref(db, 'rooms/' + id);
+        unsub = F.onValue(roomRef, s => {
+          const d = s.val();
+          if (!d) { status.value = 'notfound'; return; }
+          roomData.value = norm(d); status.value = 'ok';
+        }, e => { status.value = 'error'; roomErr.value = e.message; });
+      } else {
+        try { const d = localStorage.getItem(LK + id); if (!d) throw 0; roomData.value = norm(JSON.parse(d)); status.value = 'ok'; }
+        catch { status.value = 'notfound'; }
+      }
+    };
+    const leaveRoom = () => { viewingSaved.value = false; if (unsub) { unsub(); unsub = null; } currentRoom.value = null; try { history.pushState({}, '', location.pathname); } catch {} };
+
+    const isExpired = computed(() => !viewingSaved.value && !!roomData.value.expiresAt && Date.now() > roomData.value.expiresAt);
+    const isReadonly = computed(() => roomData.value.isLocked || isExpired.value || viewingSaved.value);
+    const activeVenue = computed(() => activeTab.value === 'summary' ? null : roomData.value.venues[activeTab.value]);
+    watch([currentRoom, () => settings.value.adminPin], async () => {
+      myHash.value = currentRoom.value && settings.value.adminPin ? await sha(settings.value.adminPin + currentRoom.value) : '';
+    }, { immediate: true });
+    const isAdmin = computed(() => !!myHash.value && myHash.value === roomData.value.adminHash);
+
+    // ทุกการแก้ไขทำเป็น transaction บนข้อมูลล่าสุดของเซิร์ฟเวอร์ -> เพื่อนจิ้มพร้อมกันไม่เขียนทับกัน
+    const mutate = async (fn, force = false) => {
+      if (status.value !== 'ok' || viewingSaved.value || (isReadonly.value && !force)) return;
+      try {
+        if (db) {
+          await F.runTransaction(roomRef, cur => {
+            if (cur === null) return cur;
+            const d = norm(cur);
+            if (!force && (d.isLocked || (d.expiresAt && Date.now() > d.expiresAt))) return; // ยกเลิก
+            fn(d); return JSON.parse(JSON.stringify(d));
+          });
+        } else {
+          const d = norm(JSON.parse(JSON.stringify(roomData.value))); fn(d);
+          localStorage.setItem(LK + currentRoom.value, JSON.stringify(d)); roomData.value = d;
+        }
+      } catch (e) { toast('บันทึกไม่สำเร็จ: ' + e.message); }
+    };
+
+    const createTrip = async () => {
+      if (creating.value) return;
+      if (!settings.value.adminPin) {
+        if (!canSettings.value) return toast('การสร้างทริปใช้ได้เฉพาะเจ้าของแอป');
+        toast('ตั้งรหัส Admin (PIN) ก่อนสร้างทริป'); showSettings.value = true; return;
+      }
+      const name = newTripName.value.trim(); if (!name) return toast('กรุณาใส่ชื่อทริป');
+      creating.value = true; const id = 'r' + uid();
+      try {
+        await initP;
+        if (!db && fbError.value) { toast('Firebase ใช้ไม่ได้: ' + fbError.value, 7000); if (canSettings.value) showSettings.value = true; return; }
+        const room = { name, expiresAt: Date.now() + 3 * 864e5, isLocked: false, adminHash: await sha(settings.value.adminPin + id),
+                       people: [], venues: [{ name: 'ร้านที่ 1', payer: '', svc: 0, vat: 0, discount: 0, items: [] }] };
+        if (db) await withTimeout(F.set(F.ref(db, 'rooms/' + id), room), 12000, 'เชื่อมต่อฐานข้อมูลไม่ได้ เช็ก databaseURL และอินเทอร์เน็ต');
+        else localStorage.setItem(LK + id, JSON.stringify(room));
+      } catch (e) { return toast('สร้างทริปไม่สำเร็จ: ' + (e.message || e) + (db ? ' (เช็ก Database Rules)' : ''), 7000); }
+      finally { creating.value = false; }
+      try { history.pushState({}, '', '?room=' + id); } catch {}
+      newTripName.value = ''; loadRoom(id);
+    };
+    const shareUrl = () => {
+      let u = location.href.split(/[?#]/)[0] + '?room=' + currentRoom.value;
+      if (!FIREBASE_CONFIG.apiKey && activeCfg) { const { apiKey, databaseURL, projectId } = activeCfg; u += '#c=' + b64u(JSON.stringify({ apiKey, databaseURL, projectId })); }
+      return u;
+    };
+    const copyLink = async () => toast(await copyText(shareUrl()) ? 'คัดลอกลิงก์แล้ว ส่งใน LINE ได้เลย (เพื่อนไม่ต้องตั้งค่าอะไร)' : 'คัดลอกไม่สำเร็จ');
+
+    /* ---------- Actions (อ้างอิงด้วย id) ---------- */
+    const vIdx = () => activeTab.value;
+    const addVenue = () => mutate(d => d.venues.push({ name: 'ร้านที่ ' + (d.venues.length + 1), payer: '', svc: 0, vat: 0, discount: 0, items: [] }))
+      .then(() => { activeTab.value = roomData.value.venues.length - 1; });
+    const setVenue = (k, val) => { const v = vIdx(); mutate(d => { d.venues[v][k] = ['svc', 'vat', 'discount'].includes(k) ? (parseFloat(val) || 0) : val; }); };
+    const addPerson = () => {
+      const n = newPersonName.value.trim(); if (!n) return;
+      if (roomData.value.people.some(p => p.name === n)) return toast('มีชื่อนี้แล้ว (ลองเติมนามสกุลหรือเลข)');
+      newPersonName.value = ''; mutate(d => { if (!d.people.some(p => p.name === n)) d.people.push({ id: 'p' + uid(), name: n }); });
+    };
+    const removePerson = id => {
+      if (!confirm('ลบชื่อเพื่อนคนนี้?')) return;
+      mutate(d => { d.people = d.people.filter(p => p.id !== id);
+        d.venues.forEach(v => { if (v.payer === id) v.payer = ''; delete i.claims[id]; }); });
+    };
+    const addItem = () => { const v = vIdx(); mutate(d => d.venues[v].items.push({ id: uid(), name: '', price: 0, qty: 1, claims: {} })); };
+    const removeItem = id => { const v = vIdx(); mutate(d => { d.venues[v].items = d.venues[v].items.filter(i => i.id !== id); }); };
+    const setItem = (id, k, val) => { const v = vIdx(); mutate(d => { const i = d.venues[v].items.find(x => x.id === id); if (i) i[k] = k === 'price' ? (parseFloat(val) || 0) : k === 'qty' ? Math.max(1, Math.floor(parseFloat(val)) || 1) : val; }); };
+    const findItem = (d, v, id) => d.venues[v].items.find(x => x.id === id);
+    const toggleClaim = (id, pid) => { const v = vIdx(); mutate(d => { const i = findItem(d, v, id); if (!i) return; if (i.claims[pid]) delete i.claims[pid]; else i.claims[pid] = 'all'; }); };
+    const setClaim = (id, pid, val) => { const v = vIdx(); mutate(d => { const i = findItem(d, v, id); if (!i) return; if (val == null) delete i.claims[pid]; else i.claims[pid] = val; }); };
+    const stepClaim = (id, pid, dlt) => { const v = vIdx(); mutate(d => { const i = findItem(d, v, id); if (!i) return;
+      const q = Math.max(1, +i.qty || 1), cur = typeof i.claims[pid] === 'number' ? i.claims[pid] : 0, n = Math.min(q, cur + dlt);
+      if (n <= 0) delete i.claims[pid]; else i.claims[pid] = n; }); };
+    const claimAll = id => { const v = vIdx(); mutate(d => { const i = findItem(d, v, id); if (i) { i.claims = {}; d.people.forEach(p => { i.claims[p.id] = 'all'; }); } }); };
+    const cnt = (it, pid) => typeof (it.claims || {})[pid] === 'number' ? it.claims[pid] : 0;
+    const itemInfo = it => {
+      const q = Math.max(1, +it.qty || 1), cl = it.claims || {}, ids = Object.keys(cl), u = +it.price || 0;
+      const used = ids.reduce((s, id) => s + (typeof cl[id] === 'number' ? cl[id] : 0), 0), al = ids.filter(id => cl[id] === 'all').length;
+      if (!ids.length) return { t: 'ยังไม่มีคนกินอันนี้', bad: 1, used };
+      if (used > q) return { t: 'ระบุจำนวนเกินที่สั่ง (' + used + '/' + q + ')', bad: 1, used };
+      const left = q - used;
+      if (!al) return left ? { t: 'เหลือ ' + left + ' ชิ้นที่ยังไม่มีคนกิน', bad: 1, used } : { t: 'ครบ ' + q + ' ชิ้นแล้ว', bad: 0, used };
+      return { t: (used ? 'ที่เหลือ ' + left + ' ชิ้น ' : '') + 'หาร ' + al + ' คน คนละ ฿' + ((u * left) / al).toFixed(2), bad: 0, used };
+    };
+    /* ---------- บิลที่บันทึกไว้ (เก็บในเครื่องของเจ้าของ) ---------- */
+    const canSettings = computed(() => !viaLink || isAdmin.value);
+    const loadHistory = () => { try { savedBills.value = JSON.parse(localStorage.getItem(HK) || '[]'); } catch { savedBills.value = []; } };
+    const persistHistory = () => { try { localStorage.setItem(HK, JSON.stringify(savedBills.value)); return true; } catch { return false; } };
+    const fmtDate = t => new Date(t).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
+    const saveBill = () => {
+      if (status.value !== 'ok' || viewingSaved.value) return;
+      const e = { id: currentRoom.value, savedAt: Date.now(), name: roomData.value.name, total: calc.value.vinfo.reduce((a, b) => a + b, 0) / 100, data: JSON.parse(JSON.stringify(roomData.value)) };
+      savedBills.value = [e, ...savedBills.value.filter(x => x.id !== e.id)];
+      toast(persistHistory() ? 'บันทึกบิลไว้แล้ว ดูได้ที่หน้าหลัก' : 'บันทึกไม่สำเร็จ พื้นที่ในเครื่องเต็ม');
+    };
+    const viewSaved = id => {
+      const h = savedBills.value.find(x => x.id === id); if (!h) return;
+      if (unsub) { unsub(); unsub = null; }
+      viewingSaved.value = true; savedId.value = id; currentRoom.value = 'saved';
+      roomData.value = norm(JSON.parse(JSON.stringify(h.data))); activeTab.value = 0; status.value = 'ok';
+    };
+    const deleteSaved = id => {
+      if (!confirm('ลบบิลที่บันทึกไว้นี้ถาวร?')) return;
+      savedBills.value = savedBills.value.filter(x => x.id !== id); persistHistory();
+      if (viewingSaved.value && savedId.value === id) leaveRoom();
+      toast('ลบบิลที่บันทึกไว้แล้ว');
+    };
+    const lockRoom = () => { if (confirm('ยืนยันล็อกบิล? เพื่อนจะแก้ไขไม่ได้อีก')) mutate(d => { d.isLocked = true; }); };
+    const unlockRoom = () => mutate(d => { d.isLocked = false; }, true);
+    const addPayment = () => { const v = vIdx(); mutate(d => d.venues[v].payments.push({ pid: '', amount: 0 })); };
+    const setPayment = (i, k, val) => { const v = vIdx(); mutate(d => { const x = d.venues[v].payments[i]; if (x) x[k] = k === 'amount' ? (parseFloat(val) || 0) : val; }); };
+    const removePayment = i => { const v = vIdx(); mutate(d => { d.venues[v].payments.splice(i, 1); }); };
+    // ช่องทางรับเงิน (เลขบัญชี / รูป QR) ของแต่ละคน
+    const payPid = ref(null), payEdit = ref(false), payForm = ref({ acct: '', qr: '' });
+    const hasPay = pid => { const x = roomData.value.pay[pid]; return !!(x && (x.acct || x.qr)); };
+    const payInfo = computed(() => roomData.value.pay[payPid.value] || { acct: '', qr: '' });
+    const payName = computed(() => (roomData.value.people.find(p => p.id === payPid.value) || {}).name || '');
+    const openPay = pid => { payPid.value = pid; payForm.value = { acct: '', qr: '', ...(roomData.value.pay[pid] || {}) }; payEdit.value = !hasPay(pid); };
+    const savePay = async () => { if (viewingSaved.value) return toast('บิลที่บันทึกไว้แก้ไขไม่ได้'); const pid = payPid.value, f = { acct: payForm.value.acct.trim(), qr: payForm.value.qr || '' }; await mutate(d => { d.pay[pid] = f; }, true); payEdit.value = false; toast('บันทึกช่องทางรับเงินแล้ว'); };
+    const pickQr = async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { payForm.value.qr = 'data:image/jpeg;base64,' + await shrink(f, 480, 0.8); } catch (err) { toast(err.message); } };
+    const copyAcct = async () => toast(await copyText(payInfo.value.acct) ? 'คัดลอกเลขบัญชีแล้ว' : 'คัดลอกไม่สำเร็จ');
+
+    /* ---------- Gemini ---------- */
+    const gfetch = async (path, opt = {}) => {
+      const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 60000);
+      try {
+        const r = await fetch(GEMINI + path, { ...opt, signal: ctl.signal, headers: { 'Content-Type': 'application/json', 'x-goog-api-key': settings.value.geminiKey.trim() } });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) { const e = new Error(j.error?.message || 'HTTP ' + r.status); e.status = r.status; throw e; }
+        return j;
+      } catch (e) { if (e.name === 'AbortError') throw new Error('หมดเวลา (60 วินาที) ลองใหม่'); throw e; }
+      finally { clearTimeout(t); }
+    };
+    // ดึงรายชื่อโมเดลจริงจาก Google ด้วย Key ของคุณ (ไม่เดาชื่อเอง)
+    const loadModels = async () => {
+      const j = await gfetch('models?pageSize=200');
+      models.value = (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes('generateContent')
+        && /gemini-.*flash/.test(m.name) && !/image|tts|live|audio|lite|robotics|computer/.test(m.name))
+        .map(m => m.name.replace('models/', '')).sort().reverse();
+      return models.value;
+    };
+    const modelOptions = computed(() => [...new Set([settings.value.geminiModel || DEFAULT_MODEL, DEFAULT_MODEL, ...models.value])]);
+    const testKey = async () => {
+      testing.value = true; testMsg.value = ''; testOk.value = false;
+      try {
+        settings.value.geminiKey = settings.value.geminiKey.trim().replace(/^["']|["']$/g, '');
+        const m = await loadModels();
+        if (!m.length) throw new Error('Key ใช้ได้ แต่ไม่พบโมเดล Flash ที่ใช้สแกนได้');
+        if (!m.includes(settings.value.geminiModel)) settings.value.geminiModel = m[0];
+        await gfetch('models/' + settings.value.geminiModel + ':generateContent', { method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: 'ตอบคำว่า OK' }] }] }) });
+        testOk.value = true; testMsg.value = '✅ ใช้งานได้ โมเดล: ' + settings.value.geminiModel + ' (กด "บันทึก" เพื่อใช้งาน)';
+      } catch (e) { testMsg.value = '❌ ' + errText(e); }
+      finally { testing.value = false; }
+    };
+    const PROMPT = 'อ่านใบเสร็จร้านอาหาร/ร้านเหล้านี้ แล้วสกัดเฉพาะรายการอาหารและเครื่องดื่มที่สั่ง '
+      + 'total = ราคารวมของบรรทัดนั้น (ราคาต่อหน่วย x จำนวน) qty = จำนวนชิ้นของบรรทัดนั้น (ไม่ระบุ = 1) ไม่ต้องใส่จำนวนต่อท้ายชื่อเมนู '
+      + 'ห้ามรวม Service Charge, VAT, ยอดรวม, ส่วนลด หรือบรรทัดชำระเงิน คงชื่อเมนูตามภาษาในบิล';
+    const SCHEMA = { type: 'OBJECT', properties: { items: { type: 'ARRAY', items: { type: 'OBJECT',
+      properties: { name: { type: 'STRING' }, qty: { type: 'NUMBER' }, total: { type: 'NUMBER' } }, required: ['name', 'qty', 'total'] } } }, required: ['items'] };
+    const scanOnce = async (model, b64) => {
+      const j = await gfetch('models/' + model + ':generateContent', { method: 'POST', body: JSON.stringify({
+        contents: [{ parts: [{ text: PROMPT }, { inline_data: { mime_type: 'image/jpeg', data: b64 } }] }],
+        generationConfig: { responseMimeType: 'application/json', responseSchema: SCHEMA } }) });
+      const c = j.candidates?.[0], t = (c?.content?.parts || []).map(p => p.text || '').join('');
+      if (!t) throw new Error('AI ไม่ตอบกลับ' + (j.promptFeedback?.blockReason || c?.finishReason ? ' (' + (j.promptFeedback?.blockReason || c.finishReason) + ')' : ''));
+      return JSON.parse(t.replace(/```json|```/g, '').trim());
+    };
+    const handleScanBill = async e => {
+      const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+      if (!settings.value.geminiKey) return toast('ใส่ Gemini API Key ในตั้งค่าก่อน');
+      isScanning.value = true; scanErr.value = ''; const v = vIdx();
+      try {
+        const b64 = await shrink(file); let model = settings.value.geminiModel || DEFAULT_MODEL, data;
+        try { data = await scanOnce(model, b64); }
+        catch (err) { // โมเดลถูกปิด/ไม่มี -> เลือกตัวใหม่ล่าสุดที่ Key ใช้ได้แล้วลองอีกครั้ง
+          if (err.status !== 404) throw err;
+          const m = await loadModels(); if (!m.length) throw err;
+          model = m[0]; data = await scanOnce(model, b64); settings.value.geminiModel = model; persist();
+        }
+        const items = (data.items || []).filter(i => i && i.name);
+        if (!items.length) return toast('ไม่พบรายการในบิล ลองถ่ายให้ชัดขึ้น');
+        await mutate(d => items.forEach(i => { const q = Math.max(1, Math.round(+i.qty) || 1); d.venues[v].items.push({ id: uid(), name: String(i.name), qty: q, price: Math.round(((parseFloat(i.total) || 0) / q) * 10000) / 10000, claims: {} }); }));
+        toast('เพิ่ม ' + items.length + ' รายการแล้ว — เช็กราคากับบิลจริงอีกครั้ง');
+      } catch (err) { console.error(err); scanErr.value = errText(err); }
+      finally { isScanning.value = false; }
+    };
+
+    /* ---------- สรุปยอด (คำนวณเป็นสตางค์ ไม่มีเศษลอย) ---------- */
+    const calc = computed(() => {
+      const R = roomData.value, st = {}, warn = [], vinfo = [], owe = {};
+      R.people.forEach(p => { st[p.id] = { id: p.id, name: p.name, consumed: 0, paid: 0, net: 0 }; });
+      R.venues.forEach((v, vi) => {
+        const label = v.name || 'ร้าน ' + (vi + 1), share = {}; let sub = 0, un = 0;
+        v.items.forEach(it => {
+          const q = Math.max(1, +it.qty || 1), c = Math.round((+it.price || 0) * q * 100); sub += c;
+          const cl = it.claims || {}, ids = Object.keys(cl).filter(id => st[id]);
+          const al = ids.filter(id => cl[id] === 'all'); let used = 0;
+          ids.filter(id => typeof cl[id] === 'number').forEach(id => { const x = Math.round(c * cl[id] / q); used += x; share[id] = (share[id] || 0) + x; });
+          const rest = Math.max(0, c - used);
+          if (!al.length) { un += rest; return; }
+          const base = Math.floor(rest / al.length); let r = rest - base * al.length;
+          al.forEach(id => { share[id] = (share[id] || 0) + base + (r-- > 0 ? 1 : 0); });
+        });
+        const f = (1 + (+v.svc || 0) / 100) * (1 + (+v.vat || 0) / 100);
+        const total = Math.max(0, Math.round((sub - Math.round((+v.discount || 0) * 100)) * f));
+        vinfo.push(total);
+        if (!sub) return;
+        const ratio = total / sub, target = Math.round((sub - un) * ratio), keys = Object.keys(share); let sum = 0;
+        keys.forEach(id => { share[id] = Math.round(share[id] * ratio); sum += share[id]; });
+        if (keys.length) { const big = keys.reduce((a, b) => share[a] >= share[b] ? a : b); share[big] += target - sum; }
+        keys.forEach(id => { st[id].consumed += share[id]; });
+        // คนจ่ายไปก่อน: ถ้าใส่คนเดียวและไม่ใส่ยอด = จ่ายเต็มบิล
+        let pays = v.payments.filter(x => st[x.pid]).map(x => ({ pid: x.pid, a: Math.round((+x.amount || 0) * 100) }));
+        if (pays.length === 1 && pays[0].a <= 0) pays[0].a = total;
+        pays = pays.filter(x => x.a > 0);
+        const P = pays.reduce((t, x) => t + x.a, 0);
+        if (!P) { warn.push(label + ': ยังไม่ได้เลือกคนจ่ายบิล'); return; }
+        if (P !== total) warn.push(label + ': ยอดที่จ่ายไปก่อนรวม ฿' + (P / 100).toFixed(2) + ' ไม่ตรงกับยอดบิล ฿' + (total / 100).toFixed(2));
+        pays.forEach(x => { st[x.pid].paid += x.a; });
+        // ยอดที่แต่ละคนกิน แบ่งจ่ายให้คนที่ออกเงินไปก่อน ตามสัดส่วนเงินที่แต่ละคนออก
+        keys.forEach(d => {
+          let left = share[d];
+          pays.forEach((x, k) => {
+            const part = k === pays.length - 1 ? left : Math.floor(share[d] * x.a / P); left -= part;
+            if (x.pid !== d && part) { (owe[d] = owe[d] || {})[x.pid] = (owe[d][x.pid] || 0) + part; }
+          });
+        });
+        if (un > 0) warn.push(label + ': มีรายการที่ยังไม่มีคนกิน (ราว ฿' + (un * ratio / 100).toFixed(2) + ') ผู้จ่ายจะรับส่วนนี้ไป');
+      });
+      // หักลบกันเป็นคู่ (A↔B) แล้วจัดกลุ่มตามคนที่ต้องโอน
+      const tx = [];
+      R.people.forEach(a => R.people.forEach(b => {
+        if (a.id >= b.id) return;
+        const n = ((owe[a.id] || {})[b.id] || 0) - ((owe[b.id] || {})[a.id] || 0);
+        if (n > 0) tx.push({ from: a.name, fromId: a.id, to: b.name, toId: b.id, amount: n });
+        else if (n < 0) tx.push({ from: b.name, fromId: b.id, to: a.name, toId: a.id, amount: -n });
+      }));
+      tx.forEach(t => { st[t.fromId].net -= t.amount; st[t.toId].net += t.amount; });
+      const groups = [];
+      tx.sort((x, y) => x.from.localeCompare(y.from) || y.amount - x.amount).forEach(t => {
+        let g = groups.find(x => x.id === t.fromId); if (!g) groups.push(g = { id: t.fromId, from: t.from, total: 0, items: [] });
+        g.total += t.amount; g.items.push({ to: t.to, toId: t.toId, amount: t.amount / 100 });
+      });
+      return { warn, vinfo, groups: groups.map(g => ({ ...g, total: g.total / 100 })), tx: tx.map(t => ({ ...t, amount: t.amount / 100 })),
+        people: Object.values(st).map(x => ({ ...x, consumed: x.consumed / 100, paid: x.paid / 100, net: x.net / 100, owes: x.net < 0, settled: x.net === 0 })) };
+    });
+    const summaryData = calc;
+    const venueTotal = computed(() => (calc.value.vinfo[activeTab.value] || 0) / 100);
+    const copySummary = async () => {
+      const S = calc.value;
+      const lines = ['🍻 ' + roomData.value.name, ...(S.tx.length ? S.tx.map(t => t.from + ' ➜ ' + t.to + ' ฿' + t.amount.toFixed(2)) : ['ทุกคนเคลียร์กันครบแล้ว ✅'])];
+      toast(await copyText(lines.join(NL)) ? 'คัดลอกสรุปแล้ว วางใน LINE ได้เลย' : 'คัดลอกไม่สำเร็จ');
+    };
+
+    onMounted(async () => {
+      loadSettings(); loadHistory(); initP = initFirebase(); await initP;
+      const r = new URLSearchParams(location.search).get('room'); if (r) loadRoom(r);
+      document.getElementById('boot')?.remove();
+    });
+
+    return { showSettings, online, fbError, settings, saveSettings, isAdmin, currentRoom, status, roomErr, roomData, isExpired, isReadonly,
+      activeTab, activeVenue, newTripName, createTrip, copyLink, leaveRoom, addVenue, setVenue, newPersonName, addPerson, removePerson,
+      addItem, removeItem, setItem, toggleClaim, claimAll, setClaim, stepClaim, cnt, itemInfo, canSettings, viewingSaved, savedId, savedBills, saveBill, viewSaved, deleteSaved, fmtDate, lockRoom, unlockRoom, isScanning, scanErr, handleScanBill,
+      addPayment, setPayment, removePayment, payPid, payEdit, payForm, hasPay, payInfo, payName, openPay, savePay, pickQr, copyAcct,
+      mascot: MASCOT, connected, creating, fbTesting, fbMsg, fbOk, testFb, summaryData, venueTotal, copySummary, toastMsg, modelOptions, testKey, testing, testMsg, testOk };
+  }
+}).directive('autogrow', { mounted: fit, updated: fit }).mount('#app');
+</script>
+</body>
+</html>
